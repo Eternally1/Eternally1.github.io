@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>matplotlib | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="matplotlib画图中的一些方法的使用 1.1 scatter 散点图matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None,">
+<meta name="keywords" content="python,matplotlib">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matplotlib">
+<meta property="og:url" content="http://yoursite.com/2018/09/08/python3/matplotlib/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="matplotlib画图中的一些方法的使用 1.1 scatter 散点图matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None,">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/Python/matplotlib/subplots_01.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/matplotlib/bar_01.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/matplotlib/bar_02.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/matplotlib/figure_01.png">
+<meta property="og:updated_time" content="2018-10-19T06:07:55.274Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="matplotlib">
+<meta name="twitter:description" content="matplotlib画图中的一些方法的使用 1.1 scatter 散点图matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None,">
+<meta name="twitter:image" content="http://yoursite.com/images/Python/matplotlib/subplots_01.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python3/matplotlib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/08/python3/matplotlib/" class="article-date">
+  <time datetime="2018-09-08T01:03:50.000Z" itemprop="datePublished">2018-09-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python3/">python3</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      matplotlib
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>matplotlib画图中的一些方法的使用</p>
+<h2 id="1-1-scatter-散点图"><a href="#1-1-scatter-散点图" class="headerlink" title="1.1 scatter 散点图"></a>1.1 scatter 散点图</h2><p>matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None, *, data=None, **kwargs)<br>画y与x的散点图，可以标记成不同的颜色或者大小  </p>
+<ul>
+<li>x，y就分别代表数据，是数组类型</li>
+<li>s 标记的大小 以平方磅为单位的标记面积，指定为下列形式之一：<ul>
+<li>数值标量 ： 以相同的大小绘制所有标记。</li>
+<li>行或列向量 ： 使每个标记具有不同的大小。x、y 和 sz 中的相应元素确定每个标记的位置和面积。sz 的长度必须等于 x 和 y 的长度。</li>
+<li>[] ： 使用 36 平方磅的默认面积。<br>但是行和列向量，[]这两种如何使用？</li>
+</ul>
+</li>
+<li>c 颜色，其中对应如下  b=blue  c=cyan g=green k=black m=magenta r=red w=white y=yellow</li>
+<li>marker 标记样式 ‘o’ 圆圈   ‘+’＋号  等等</li>
+</ul>
+<p>一些具体的使用案例可以参考本博客的<a href="https://eternally1.github.io/2018/09/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/%E8%81%9A%E7%B1%BB/" target="_blank" rel="noopener">聚类</a></p>
+<h2 id="1-2-一些小的方法"><a href="#1-2-一些小的方法" class="headerlink" title="1.2 一些小的方法"></a>1.2 一些小的方法</h2><h3 id="1-2-1-figure-amp-subplots"><a href="#1-2-1-figure-amp-subplots" class="headerlink" title="1.2.1 figure &amp; subplots"></a>1.2.1 figure &amp; subplots</h3><p>plt.figure()用来产生多个图，图片按照顺序增加，需要注意一个概念，当前图和当前坐标。通过下面一个例子了解figure和subplot的使用方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.figure(<span class="number">1</span>)                <span class="comment"># 第一张图</span></span><br><span class="line">plt.subplot(<span class="number">211</span>)             <span class="comment"># 第一张图中的第一张子图</span></span><br><span class="line">plt.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">plt.subplot(<span class="number">212</span>)             <span class="comment"># 第一张图中的第二张子图</span></span><br><span class="line">plt.plot([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">2</span>)                <span class="comment"># 第二张图</span></span><br><span class="line">plt.plot([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])            <span class="comment"># 默认创建子图subplot(111)</span></span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>)                <span class="comment"># 切换到figure 1 ; 子图subplot(212)仍旧是当前图</span></span><br><span class="line">plt.subplot(<span class="number">211</span>)             <span class="comment"># 令子图subplot(211)成为figure1的当前图</span></span><br><span class="line">plt.title(<span class="string">'Easy as 1,2,3'</span>)   <span class="comment"># 添加subplot 211 的标题</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="subplots"><a href="#subplots" class="headerlink" title="subplots"></a>subplots</h4><pre><code>matplotlib.pyplot.subplots(nrows=1, ncols=1, sharex=False, sharey=False, squeeze=True, subplot_kw=None, gridspec_kw=None, **fig_kw)
+比较常用的参数也就是前面两个，代表创建的子图的行列数量。返回值是fig和ax，分别表示Figure和Axes的对象，可以看1.5中的matplotlib的详细构造。
+</code></pre><p>一些小的例子，只创建一个axes对象，此时在subplots默认为创建一个Figure和一个axes<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">fig,ax = plt.subplots()</span><br><span class="line">ax.plot([<span class="number">1</span>,<span class="number">2</span>])</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">ax1.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">ax2.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">axes[<span class="number">0</span>,<span class="number">0</span>].plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">axes[<span class="number">1</span>,<span class="number">1</span>].plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/subplots_01.png" width="400px" height="300px"></p>
+<h3 id="1-2-2-plt-xlabel-plt-ylabel等"><a href="#1-2-2-plt-xlabel-plt-ylabel等" class="headerlink" title="1.2.2 plt.xlabel  plt.ylabel等"></a>1.2.2 plt.xlabel  plt.ylabel等</h3><p>xlabel   ylabel分别是用来设置坐标系的名称的。</p>
+<h3 id="1-2-3-图例legend"><a href="#1-2-3-图例legend" class="headerlink" title="1.2.3 图例legend"></a>1.2.3 图例legend</h3><p>调用matplotlib.pyplot.legend(*args, **kwargs)可以设置legend,有如下一些参数：</p>
+<ul>
+<li>loc   可选值：best，upper right ， upper left，lower right|left， center right|left, lower center .etc</li>
+<li>fontsize 字体大小，可以设置int或者xx-small x-small small medium large x-large xx-large</li>
+<li>fremeon  False or True  设置图例边框</li>
+<li>edgecolor 设置图例边框颜色  blue  red etc.</li>
+<li>facecolor  设置图例背景颜色，若无边框，参数无效</li>
+<li>title 设置图例标题</li>
+</ul>
+<h3 id="1-2-4-annotate-添加注释"><a href="#1-2-4-annotate-添加注释" class="headerlink" title="1.2.4 annotate 添加注释"></a>1.2.4 annotate 添加注释</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加注释</span></span><br><span class="line"><span class="comment"># 第一个参数是注释的内容</span></span><br><span class="line"><span class="comment"># xy设置箭头尖的坐标</span></span><br><span class="line"><span class="comment"># xytext设置注释内容显示的起始位置</span></span><br><span class="line"><span class="comment"># arrowprops 用来设置箭头</span></span><br><span class="line"><span class="comment"># facecolor 设置箭头的颜色</span></span><br><span class="line"><span class="comment"># headlength 箭头的头的长度</span></span><br><span class="line"><span class="comment"># headwidth 箭头的宽度</span></span><br><span class="line"><span class="comment"># width 箭身的宽度</span></span><br><span class="line">plt.annotate(<span class="string">u"This is a zhushi"</span>, xy = (<span class="number">0</span>, <span class="number">1</span>), xytext = (<span class="number">-4</span>, <span class="number">50</span>),</span><br><span class="line">             arrowprops = dict(facecolor = <span class="string">"r"</span>, headlength = <span class="number">10</span>, headwidth = <span class="number">30</span>, width = <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-5解决中文显示问题"><a href="#1-2-5解决中文显示问题" class="headerlink" title="1.2.5解决中文显示问题"></a>1.2.5解决中文显示问题</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-6-设置坐标轴的可读xticks"><a href="#1-2-6-设置坐标轴的可读xticks" class="headerlink" title="1.2.6 设置坐标轴的可读xticks()"></a>1.2.6 设置坐标轴的可读xticks()</h3><p>这个之后在进行补充。</p>
+<h3 id="1-2-7-matplotlib-inline"><a href="#1-2-7-matplotlib-inline" class="headerlink" title="1.2.7 %matplotlib inline"></a>1.2.7 %matplotlib inline</h3><p>经常会看到这么一行代码<br>%matplotlib inline  </p>
+<p>但是放到自己的IDE环境下运行时，总是报错。<br>在Stack Overflow上看到了一个解释:<br>IPython有一组预定义的“魔术函数”，您可以使用命令行样式语法调用它们。有两种魔法，一种是线导向（line-oriented），另一种是单元导向(cell-oriented)。line magics以%字符作为前缀，其工作方式与操作系统命令行调用非常相似:它们作用于整行,line magics可以返回结果，也可以进行赋值使用；cell magics是以%%开头，它需要出现在单元的第一行，而且是作用于整个单元。  </p>
+<p>使用此方法时，绘制命令的输出将在前端显示，就像Jupyter笔记本一样，直接显示在生成命令的代码单元格的下方，生成的绘图也将存储在笔记本文档中。不过这个方法好像只适用于Jupyter notebook和Jupyter QtConsole。</p>
+<h3 id="1-2-8-rcParams"><a href="#1-2-8-rcParams" class="headerlink" title="1.2.8 rcParams"></a>1.2.8 rcParams</h3><p>matplotlib.rcParams[‘figure.figsize’]  # 图片尺寸<br>plt.rcParams[‘figure.figsize’] = (16, 9)   # 代表16:9这种大小的。或者4:3等 </p>
+<h3 id="1-2-9-style-use"><a href="#1-2-9-style-use" class="headerlink" title="1.2.9 style.use"></a>1.2.9 style.use</h3><p>plt.style.use(“ggplot”)使用自带的样式进行美化<br>plt.style.available  获取所有的自带样式<br>可以对生成的图形进行美化  </p>
+<h2 id="1-3-plot-折线图"><a href="#1-3-plot-折线图" class="headerlink" title="1.3 plot 折线图"></a>1.3 plot 折线图</h2><p>plot([x], y, [fmt], data=None,**kwargs)<br>fmt = ‘[color][marker][line]’设置这个属性可以分别设置颜色，点的样式以及连线的样式。<br>**kwargs中可以是包含关键词的属性：  </p>
+<ul>
+<li>label   用于自动图例的</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">time= [<span class="string">"07-22"</span>,<span class="string">"07-23"</span>,<span class="string">"07-24"</span>,<span class="string">"07-25"</span>,<span class="string">"07-26"</span>,<span class="string">"07-27"</span>,<span class="string">"07-28"</span>]</span><br><span class="line"></span><br><span class="line">counts_baidu = [<span class="number">13879</span>,<span class="number">17886</span>,<span class="number">11305</span>,<span class="number">5961</span>,<span class="number">3086</span>,<span class="number">2331</span>,<span class="number">1680</span>]</span><br><span class="line">counts_weibo = [ <span class="number">14201</span>,<span class="number">19541</span>,<span class="number">9084</span>,<span class="number">6014</span>,<span class="number">4102</span>,<span class="number">1900</span>,<span class="number">1702</span> ]</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>)</span><br><span class="line">plt.xlabel(<span class="string">'time'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'counts'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.plot(time, counts_baidu, <span class="string">'b.-'</span>, label=<span class="string">"baidu"</span>)</span><br><span class="line">plt.plot(time,counts_weibo,<span class="string">'g.--'</span>,label=<span class="string">"weibo"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置legend,前提是需要在plot中添加label属性。</span></span><br><span class="line">plt.legend(loc=<span class="string">"upper right"</span>,fontsize=<span class="number">12</span>,facecolor=<span class="string">'white'</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="1-4-bar-柱状图"><a href="#1-4-bar-柱状图" class="headerlink" title="1.4 bar  柱状图"></a>1.4 bar  柱状图</h2><p>matplotlib.pyplot.bar(*args, **kwargs)<br>参数有如下：<br>       width: 设置柱形条宽度，同时也就设置了柱形条之间的宽度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br><span class="line"></span><br><span class="line">top_10_nouns = [(<span class="string">'疫苗'</span>, <span class="number">1405</span>), (<span class="string">'长生'</span>, <span class="number">866</span>), (<span class="string">'生物'</span>, <span class="number">455</span>), (<span class="string">'问题'</span>, <span class="number">311</span>), (<span class="string">'事件'</span>, <span class="number">276</span>), (<span class="string">'狂犬病'</span>, <span class="number">176</span>), (<span class="string">'公司'</span>, <span class="number">149</span>), (<span class="string">'记录'</span>, <span class="number">143</span>), (<span class="string">'企业'</span>, <span class="number">125</span>), (<span class="string">'狂犬'</span>, <span class="number">89</span>)]</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'关键词'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'次数'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、determine the value of x and y axis</span></span><br><span class="line">x = [item[<span class="number">0</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line">y = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 use bar function to draw the graph</span></span><br><span class="line">plt.bar(x, y,width=<span class="number">0.6</span>,color=<span class="string">'b'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/bar_01.png" width="400px" height="300px"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br><span class="line"></span><br><span class="line">top_10_nouns = [(<span class="string">'疫苗'</span>, <span class="number">1405</span>), (<span class="string">'长生'</span>, <span class="number">866</span>), (<span class="string">'生物'</span>, <span class="number">455</span>), (<span class="string">'问题'</span>, <span class="number">311</span>), (<span class="string">'事件'</span>, <span class="number">276</span>), (<span class="string">'狂犬病'</span>, <span class="number">176</span>), (<span class="string">'公司'</span>, <span class="number">149</span>), (<span class="string">'记录'</span>, <span class="number">143</span>), (<span class="string">'企业'</span>, <span class="number">125</span>), (<span class="string">'狂犬'</span>, <span class="number">89</span>)]</span><br><span class="line">top_10_verbs = [(<span class="string">'造假'</span>, <span class="number">233</span>), (<span class="string">'接种'</span>, <span class="number">152</span>), (<span class="string">'有'</span>, <span class="number">108</span>), (<span class="string">'相关'</span>, <span class="number">74</span>), (<span class="string">'是否'</span>, <span class="number">70</span>), (<span class="string">'关注'</span>, <span class="number">66</span>), (<span class="string">'能'</span>, <span class="number">52</span>), (<span class="string">'称'</span>, <span class="number">52</span>), (<span class="string">'采购'</span>, <span class="number">52</span>), (<span class="string">'涉事'</span>, <span class="number">45</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># for set xlabels</span></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'关键词'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'次数'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、determine the value of x and y axis</span></span><br><span class="line">x1 =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line">labels = [item[<span class="number">0</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line">y1 = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 use bar function to draw the graph</span></span><br><span class="line">plt.bar(x1, y1,width=<span class="number">0.2</span>,color=<span class="string">'b'</span>,lw=<span class="number">1</span>)</span><br><span class="line">ax.set_xticklabels(labels)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x2 = [item+<span class="number">0.2</span> <span class="keyword">for</span> item <span class="keyword">in</span> x1]</span><br><span class="line">y2 = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_verbs]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.bar(x2, y2,width=<span class="number">0.2</span>,color=<span class="string">'r'</span>,lw=<span class="number">1</span>)</span><br><span class="line">plt.xticks([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/bar_02.png" width="400px" height="300px"></p>
+<h2 id="1-5-关于matplotlib各个图像部分的解释"><a href="#1-5-关于matplotlib各个图像部分的解释" class="headerlink" title="1.5 关于matplotlib各个图像部分的解释"></a>1.5 关于matplotlib各个图像部分的解释</h2><p>可以参考<a href="https://www.cnblogs.com/nju2014/p/5620776.html" target="_blank" rel="noopener">这里</a>,主要是关于figure，axes，subplot之间的关系进行了说明，比较清楚。</p>
+<p>首先一幅Matplotlib的图像组成部分介绍。</p>
+<p>在matplotlib中，整个图像为一个Figure对象。在Figure对象中可以包含一个或者多个Axes对象。每个Axes(ax)对象都是一个拥有自己坐标系统的绘图区域。所属关系如下：<br><img src="/images/Python/matplotlib/figure_01.png" width="400px" height="300px"></p>
+<p>这里有一个系列的matplotlib的教程，可以增加理解。<a href="https://www.cnblogs.com/nju2014/tag/Matplotlib/" target="_blank" rel="noopener">here</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/08/python3/matplotlib/" data-id="cjtinfprl004cxw77gm2p46k1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/09/Algorithms/时间复杂度和空间复杂度/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          时间复杂度和空间复杂度
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/08/python3/sklearn/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">sklearn</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/C语言/">C语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MachineLearning/">MachineLearning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kaggle/">kaggle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python3/">python3</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/weibo/">weibo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/word2vec/">word2vec</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BP算法/">BP算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IO/">IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KNN/">KNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beautifulsoup/">beautifulsoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collections/">collections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/divide-and-conquer/">divide-and-conquer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/file/">file</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jieba/">jieba</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kaggle/">kaggle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pandas/">pandas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/realize/">realize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sklearn/">sklearn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/snippets/">snippets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weibo/">weibo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiebo/">wiebo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/决策树/">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分类/">分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小demo/">小demo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微博/">微博</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支持向量机/">支持向量机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据分析/">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝叶斯/">贝叶斯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 17.5px;">Algorithm</a> <a href="/tags/BP算法/" style="font-size: 10px;">BP算法</a> <a href="/tags/Bayes/" style="font-size: 10px;">Bayes</a> <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/DL/" style="font-size: 10px;">DL</a> <a href="/tags/EM/" style="font-size: 10px;">EM</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/KNN/" style="font-size: 10px;">KNN</a> <a href="/tags/MachineLearning/" style="font-size: 12.5px;">MachineLearning</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/SPSS/" style="font-size: 10px;">SPSS</a> <a href="/tags/beautifulsoup/" style="font-size: 10px;">beautifulsoup</a> <a href="/tags/collections/" style="font-size: 10px;">collections</a> <a href="/tags/divide-and-conquer/" style="font-size: 10px;">divide-and-conquer</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/jieba/" style="font-size: 10px;">jieba</a> <a href="/tags/k-means/" style="font-size: 10px;">k-means</a> <a href="/tags/kaggle/" style="font-size: 10px;">kaggle</a> <a href="/tags/matplotlib/" style="font-size: 12.5px;">matplotlib</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/pandas/" style="font-size: 10px;">pandas</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/realize/" style="font-size: 10px;">realize</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/sklearn/" style="font-size: 10px;">sklearn</a> <a href="/tags/snippets/" style="font-size: 10px;">snippets</a> <a href="/tags/weibo/" style="font-size: 10px;">weibo</a> <a href="/tags/wiebo/" style="font-size: 10px;">wiebo</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/全概率公式/" style="font-size: 10px;">全概率公式</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/分类/" style="font-size: 12.5px;">分类</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/小demo/" style="font-size: 10px;">小demo</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/微博/" style="font-size: 10px;">微博</a> <a href="/tags/支持向量机/" style="font-size: 10px;">支持向量机</a> <a href="/tags/数据分析/" style="font-size: 10px;">数据分析</a> <a href="/tags/时间复杂度/" style="font-size: 10px;">时间复杂度</a> <a href="/tags/最大似然估计/" style="font-size: 10px;">最大似然估计</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/贝叶斯/" style="font-size: 10px;">贝叶斯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/DivideAndConquer/">Divide and Conquer</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/Dynamic-Planning/">Dynamic Planning</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/python3/word2vec/">word2vec</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/21/Algorithms/算法/">算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

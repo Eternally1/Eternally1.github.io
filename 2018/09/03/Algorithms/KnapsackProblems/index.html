@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>KnapsackProblems | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言通过学习背包九讲这个文档，掌握动态规划题目的解决方法。 1 背包问题有N 件物品和一个容量为V 的背包。第i 件物品的费用（体积）是c[i]，价值是w[i]。求解将哪些物品装入背包可使价值总和最大。这里每一件物品只能取一次 1.1 思路根据子问题定义状态，找出状态转移方程。子问题就是：第i件物品是否放入背包。如果不放，那么第i件物品放入背包中的总价值和第i-1件物品放入背包的总价值相当。如果放">
+<meta name="keywords" content="Algorithm,动态规划">
+<meta property="og:type" content="article">
+<meta property="og:title" content="KnapsackProblems">
+<meta property="og:url" content="http://yoursite.com/2018/09/03/Algorithms/KnapsackProblems/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="引言通过学习背包九讲这个文档，掌握动态规划题目的解决方法。 1 背包问题有N 件物品和一个容量为V 的背包。第i 件物品的费用（体积）是c[i]，价值是w[i]。求解将哪些物品装入背包可使价值总和最大。这里每一件物品只能取一次 1.1 思路根据子问题定义状态，找出状态转移方程。子问题就是：第i件物品是否放入背包。如果不放，那么第i件物品放入背包中的总价值和第i-1件物品放入背包的总价值相当。如果放">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-11-02T03:45:14.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="KnapsackProblems">
+<meta name="twitter:description" content="引言通过学习背包九讲这个文档，掌握动态规划题目的解决方法。 1 背包问题有N 件物品和一个容量为V 的背包。第i 件物品的费用（体积）是c[i]，价值是w[i]。求解将哪些物品装入背包可使价值总和最大。这里每一件物品只能取一次 1.1 思路根据子问题定义状态，找出状态转移方程。子问题就是：第i件物品是否放入背包。如果不放，那么第i件物品放入背包中的总价值和第i-1件物品放入背包的总价值相当。如果放">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Algorithms/KnapsackProblems" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/03/Algorithms/KnapsackProblems/" class="article-date">
+  <time datetime="2018-09-03T11:24:33.000Z" itemprop="datePublished">2018-09-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      KnapsackProblems
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>通过学习背包九讲这个文档，掌握动态规划题目的解决方法。</p>
+<h1 id="1-背包问题"><a href="#1-背包问题" class="headerlink" title="1 背包问题"></a>1 背包问题</h1><p>有N 件物品和一个容量为V 的背包。第i 件物品的费用（体积）是c[i]，价值是w[i]。<br>求解将哪些物品装入背包可使价值总和最大。这里每一件物品只能取一次</p>
+<h2 id="1-1-思路"><a href="#1-1-思路" class="headerlink" title="1.1 思路"></a>1.1 思路</h2><p>根据子问题定义状态，找出状态转移方程。<br>子问题就是：第i件物品是否放入背包。如果不放，那么第i件物品放入背包中的总价值和第i-1件物品放入背包的总价值相当。如果放入背包，也就是求出第i-1件物品放入v-c[i]的背包中时的值与第i件物品的价值的和，得到的就是总价值。<br>f[i][v]=max{f[i-1][v],f[i-1][v-c[i]]+w[i]}</p>
+<p>核心代码如下：<br>以下代码中，注意i和j的起始遍历位置，从第1行和第1列开始，此时的1表示的就是物品的编号。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//traverse N goods</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(j-C[i]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            f[i][j] = Math.max(f[i-<span class="number">1</span>][j],f[i-<span class="number">1</span>][j-C[i]]+W[i]);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            f[i][j] = f[i-<span class="number">1</span>][j];   <span class="comment">//这行代码可以不要。</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="1-2-初始化问题"><a href="#1-2-初始化问题" class="headerlink" title="1.2 初始化问题"></a>1.2 初始化问题</h2><p>已知有物品4件（N=4），背包容量V=10，每件物品的体积为5,4,6,3，每件物品的对应价值为10,40,30,50。<br>首先是关于初始化的问题，可以建立一个$(N+1)*(V+1)$的二维数组，增设第一行第一列是为了循环遍历的方便。一步步构建如下所示，初始时可以构建二维数组如下：  </p>
+<table>
+<thead>
+<tr>
+<th>V      N</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>得到的结果如下：</p>
+<p>如果没有要求必须恰好装满背包，那么初始化的时候可以将二维数组全部初始化为0。若要求恰好装满背包，那么在初始化的时候除了第一行和第一列为0，其余均为无穷大。此时表最终的结果如下： </p>
+<table>
+<thead>
+<tr>
+<th>V      N</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>40</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>inf</td>
+<td>30</td>
+<td>10</td>
+<td>10</td>
+<td>50</td>
+<td>70</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>inf</td>
+<td>inf</td>
+<td>50</td>
+<td>inf</td>
+<td>inf</td>
+<td>30</td>
+<td>10</td>
+<td>10</td>
+<td>80</td>
+<td>70</td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是，此时上述的核心代码中就要有一定的调整，调整如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//traverse N goods</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(j-C[i]&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            f[i][j] = Math.max(f[i-<span class="number">1</span>][j],f[i-<span class="number">1</span>][j-C[i]]+W[i]);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//这里的语句需要删掉，否则初始化为负无穷大就没有了意义。</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="1-3-被选择的物品"><a href="#1-3-被选择的物品" class="headerlink" title="1.3 被选择的物品"></a>1.3 被选择的物品</h2><p>当求解出最大价值的时候，如何求出所选择的的物品？根据状态转移方程可知，当f[i-1][j] = f[i][j]的时候，表示i没有放入背包，否则表示放入背包，此时减去该背包的体积，然后再判断该体积下的情况，直到第一件物品。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = N;i&gt;=<span class="number">1</span>;i--)&#123;</span><br><span class="line">    <span class="keyword">if</span>(f[i-<span class="number">1</span>][V] != f[i][V])&#123;</span><br><span class="line">        System.out.print(i+<span class="string">"  "</span>);</span><br><span class="line">        V -= C[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="1-4-空间优化"><a href="#1-4-空间优化" class="headerlink" title="1.4 空间优化"></a>1.4 空间优化</h2><p>每一次的f[i][v]的值只与f[i-1][v]的值有关，因此可以修改为一维数组，f[v]表示将前i个物品装入容量为v的背包时的最大价值。主要是注意遍历的时候，第二个是倒序，此时表示每一次循环的时候，上一次保存的f[v]还没有发生变化，从而说明一件物品被使用了一次。如果不是倒序还是使用正序，此时会发现可以重复选择物品。<br>下面代码中打印输出了每一次循环的时候f[v]的值。使用一维数组实现，从而在空间上进行了优化。如果要实现恰好装满背包，那么初始化的时候，f[0]为0，其余初始化为无穷大。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;=N;i++)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = V;j&gt;=<span class="number">0</span>;j--)&#123;</span><br><span class="line">        <span class="keyword">if</span>(j&gt;=C[i])&#123;</span><br><span class="line">            f[j] = Math.max(f[j], f[j-C[i]]+W[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;=V;j++)&#123;</span><br><span class="line">        System.out.print(f[j]+<span class="string">"  "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="1-5-使用二维数组解决背包问题"><a href="#1-5-使用二维数组解决背包问题" class="headerlink" title="1.5 使用二维数组解决背包问题"></a>1.5 使用二维数组解决背包问题</h2><p>代码如下，注意其中两种的同的初始化。对于恰好装满背包问题，初始化数组的时候可以这样理解：初始化数据也就是初始化背包状态，即没有任何物品装入的时候的背包状态。如果要求背包恰好装满，那么最开始的时候只有背包容量为0的时候才有可能被价值为0的nothing恰好装满（因为背包的初始状态时什么也没装），如果容量大于1，那么此时因为背包什么也没装，则没有合法的解，属于未定义状态，可以初始化为$\inf$<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 0-1 knapsack problem: two-dimensional array and one-dimensional array are used to resolve this problem</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">knapsack_2_array</span><span class="params">(N, V, C, W)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param N: the number of goods</span></span><br><span class="line"><span class="string">    :param V: the total volume of goods</span></span><br><span class="line"><span class="string">    :param C: the volume of each goods  type-list</span></span><br><span class="line"><span class="string">    :param W: the weight of each goods type-list</span></span><br><span class="line"><span class="string">    :return: f[N][V]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># initialization</span></span><br><span class="line">    <span class="comment"># f = np.zeros((N+1, V+1))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># another initialization for just full of knapsack</span></span><br><span class="line">    f = np.zeros((N+<span class="number">1</span>, V+<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(V+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">0</span>:</span><br><span class="line">                f[i][j] = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f[i][j] = float(<span class="string">'-inf'</span>)</span><br><span class="line">    print(f)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, N+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, V+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j-C[i]&gt;=<span class="number">0</span>:</span><br><span class="line">                f[i][j] = max(f[i<span class="number">-1</span>][j], f[i<span class="number">-1</span>][j-C[i]]+W[i])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f[i][j] = f[i<span class="number">-1</span>][j]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_choosed_goods_2_array</span><span class="params">(N, V, C, W, f)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">if</span> f[i][V] == f[i<span class="number">-1</span>][V]:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            V = V-C[i]</span><br><span class="line">            print(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    N = <span class="number">5</span></span><br><span class="line">    V = <span class="number">10</span></span><br><span class="line">    C = [<span class="number">0</span>, <span class="number">6</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">    W = [<span class="number">0</span>, <span class="number">8</span>, <span class="number">10</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>]</span><br><span class="line">    f1 = knapsack_2_array(N, V, C, W)</span><br><span class="line">    print(f1)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">恰好装满时的初始化结果和运行结果</span><br><span class="line">[[  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]]</span><br><span class="line">[[  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf   8. -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf  10. -inf   8. -inf -inf -inf  18.]</span><br><span class="line"> [  0. -inf -inf -inf  10. -inf   8. -inf  14. -inf  18.]</span><br><span class="line"> [  0. -inf   5. -inf  10. -inf  15. -inf  14. -inf  19.]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15.  15.  14.  20.  19.]]</span><br><span class="line"> 被选择物品 4 3 2</span><br><span class="line"></span><br><span class="line"> 没有要求恰好装满时的运行结果</span><br><span class="line">[[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.]</span><br><span class="line"> [ 0.  0.  0.  0.  0.  0.  8.  8.  8.  8.  8.]</span><br><span class="line"> [ 0.  0.  0.  0. 10. 10. 10. 10. 10. 10. 18.]</span><br><span class="line"> [ 0.  0.  0.  0. 10. 10. 10. 10. 14. 14. 18.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 15. 19.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 20. 20.]]</span><br><span class="line"></span><br><span class="line"> 输出被选择的物品</span><br><span class="line">5 4 2</span><br></pre></td></tr></table></figure>
+<h2 id="1-6-使用一维数组解决问题"><a href="#1-6-使用一维数组解决问题" class="headerlink" title="1.6 使用一维数组解决问题"></a>1.6 使用一维数组解决问题</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">knapsack_1_array</span><span class="params">(N, V, C, W)</span>:</span></span><br><span class="line">    <span class="comment"># initialization</span></span><br><span class="line">    f = np.zeros(V+<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># initialization for just full of knapsack</span></span><br><span class="line">    <span class="comment"># f = np.zeros(V+1)</span></span><br><span class="line">    <span class="comment"># for i in range(V+1):</span></span><br><span class="line">    <span class="comment">#     if i == 0:</span></span><br><span class="line">    <span class="comment">#         f[i] = 0</span></span><br><span class="line">    <span class="comment">#     else:</span></span><br><span class="line">    <span class="comment">#         f[i] = float('-inf')</span></span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Output intermediate process result"</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, N+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(V, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> j-C[i] &gt;= <span class="number">0</span>:</span><br><span class="line">                f[j] = max(f[j], f[j-C[i]]+W[i])</span><br><span class="line">        print(f)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Output the final result"</span>)</span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_choosed_goods_1_array</span><span class="params">(N, V, C, W, f)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">if</span> f[V] == f[V-C[i]]+W[i]:</span><br><span class="line">            V = V-C[i]</span><br><span class="line">            print(i)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">输出结果</span><br><span class="line">[  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line">Output intermediate process result</span><br><span class="line">[  0. -inf -inf -inf -inf -inf   8. -inf -inf -inf -inf]</span><br><span class="line">[  0. -inf -inf -inf  10. -inf   8. -inf -inf -inf  18.]</span><br><span class="line">[  0. -inf -inf -inf  10. -inf   8. -inf  14. -inf  18.]</span><br><span class="line">[  0. -inf   5. -inf  10. -inf  15. -inf  14. -inf  19.]</span><br><span class="line">[  0. -inf   5.   5.  10.  10.  15.  15.  14.  20.  19.]</span><br><span class="line">Output the final result</span><br><span class="line">[  0. -inf   5.   5.  10.  10.  15.  15.  14.  20.  19.]</span><br><span class="line">4 3 2</span><br><span class="line"></span><br><span class="line">没有要求恰好装满的时候</span><br><span class="line">Output intermediate process result</span><br><span class="line">[0. 0. 0. 0. 0. 0. 8. 8. 8. 8. 8.]</span><br><span class="line">[ 0.  0.  0.  0. 10. 10. 10. 10. 10. 10. 18.]</span><br><span class="line">[ 0.  0.  0.  0. 10. 10. 10. 10. 14. 14. 18.]</span><br><span class="line">[ 0.  0.  5.  5. 10. 10. 15. 15. 15. 15. 19.]</span><br><span class="line">[ 0.  0.  5.  5. 10. 10. 15. 15. 15. 20. 20.]</span><br><span class="line">Output the final result</span><br><span class="line">[ 0.  0.  5.  5. 10. 10. 15. 15. 15. 20. 20.]</span><br><span class="line"></span><br><span class="line">选择的物品</span><br><span class="line">5 4 2</span><br></pre></td></tr></table></figure>
+<p>关于上面在j遍历的使用使用逆序的原因，下面举一个例子：如果按照j顺序遍历，当i=1,j=1,2的时候，f[1]=f[2] = 0;当j=3的时候，f[3] = max(f[3], f[3-3]+w[1])= max(0,4) = 4;当j=4,5的时候，f[4]=[5] = 4。但是当j=6的时候，有f[6] = max(f[6], f[6-3]+w[1]) = max(0, 8)。这个8其实是因为第一件物品取了两次得到的，这显然不符合01背包问题（每件物品只能取一次）</p>
+<p>在输出结果的时候，注意遍历的方向，N是从最大值向最小值遍历，因为所得数组的最后一项内容是要求解的结果，所以需要从后向前遍历</p>
+<h1 id="2-完全背包问题"><a href="#2-完全背包问题" class="headerlink" title="2 完全背包问题"></a>2 完全背包问题</h1><p>与0-1背包问题的差别就是每一个物品可以重复多次放入，因此子问题就相应的需要改变，针对第i个物品，不是放入背包或者不放入背包，而应该是放入0次，或者多次。因此状态转移方程需要进行修改如下:</p>
+<p>$$<br>f[i][v]=max{f[i-1][v-k\times{c[i]}]+k\times{w[i]}|0&lt;=k\times{c[i]}&lt;=v}<br>$$<br>k值表示放入的次数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getMaxWorth</span><span class="params">(amount, total_capacity, volumes, worths)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        amount: the quantity of things  type-int</span></span><br><span class="line"><span class="string">        total_capacity: the volume of backpack  type-int</span></span><br><span class="line"><span class="string">        volumes: the volume of each thing  type-list</span></span><br><span class="line"><span class="string">        worths: the worth of each thing    type-list</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># create a amount*total_capacity array and initialization</span></span><br><span class="line">    f = np.zeros((amount+<span class="number">1</span>,total_capacity+<span class="number">1</span>), dtype=int)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,amount+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,total_capacity+<span class="number">1</span>):</span><br><span class="line">            temp = []</span><br><span class="line">            k = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> k*volumes[i] &lt;= j :</span><br><span class="line">                temp.append(f[i<span class="number">-1</span>][j-k*volumes[i]]+k*worths[i])</span><br><span class="line">                k+=<span class="number">1</span></span><br><span class="line">            f[i][j] = max(temp)</span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line">amount = <span class="number">4</span></span><br><span class="line">total_capacity=<span class="number">10</span></span><br><span class="line">volumes=[<span class="number">0</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">3</span>]</span><br><span class="line">worths=[<span class="number">0</span>,<span class="number">10</span>,<span class="number">40</span>,<span class="number">30</span>,<span class="number">50</span>]</span><br><span class="line">getMaxWorth(amount, total_capacity, volumes, worths)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">array([[  <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>],</span><br><span class="line">       [  <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">10</span>,  <span class="number">10</span>,  <span class="number">10</span>,  <span class="number">10</span>,  <span class="number">10</span>,  <span class="number">20</span>],</span><br><span class="line">       [  <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">80</span>,  <span class="number">80</span>,  <span class="number">80</span>],</span><br><span class="line">       [  <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">40</span>,  <span class="number">80</span>,  <span class="number">80</span>,  <span class="number">80</span>],</span><br><span class="line">       [  <span class="number">0</span>,   <span class="number">0</span>,   <span class="number">0</span>,  <span class="number">50</span>,  <span class="number">50</span>,  <span class="number">50</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="number">150</span>, <span class="number">150</span>]])</span><br></pre></td></tr></table></figure>
+<p>上面的时间复杂度分析：此问题和01背包问题一样，有$O(N*V)$个状态需要求解，但是每一个状态求解的时间已经发生了变化，求解状态f[i][v]的时间为O(v/c[i])，总的时间复杂度超过了O(NV)，其中N是物品数量，V是背包容量。</p>
+<h2 id="2-1-简单优化方案"><a href="#2-1-简单优化方案" class="headerlink" title="2.1 简单优化方案"></a>2.1 简单优化方案</h2><p>若两件物品i,j满足 volumes[i]&lt; volumes[j]  并且 worths[i]&gt;worths[j]，则说明i物品体积小并且价值高，可以替换物品j，也就是可以将物品j删除掉。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_can_be_delete_item_index</span><span class="params">(volumes, worths)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    delete items with small volume and small value</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    index_for_delete = set()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(volumes)<span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, len(volumes)):</span><br><span class="line">            <span class="keyword">if</span> volumes[i] &gt; volumes[j] <span class="keyword">and</span> worths[i] &lt; worths[j]:</span><br><span class="line">                 index_for_delete.add(i)</span><br><span class="line">    <span class="keyword">return</span> index_for_delete</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getMaxWorth</span><span class="params">(amount, total_capacity, volumes, worths)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        amount: the quantity of things  type-int</span></span><br><span class="line"><span class="string">        total_capacity: the volume of backpack  type-int</span></span><br><span class="line"><span class="string">        volumes: the volume of each thing  type-list</span></span><br><span class="line"><span class="string">        worths: the worth of each thing    type-list</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    new_volumes = []</span><br><span class="line">    new_worths = []</span><br><span class="line">    index_delete = get_can_be_delete_item_index(volumes, worths)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(volumes)):</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> index_delete:</span><br><span class="line">            new_volumes.append(volumes[i])</span><br><span class="line">            new_worths.append(worths[i])</span><br><span class="line"><span class="comment">#     print(new_volumes, new_worths)</span></span><br><span class="line"></span><br><span class="line">    amount = len(new_volumes)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># create a amount*total_capacity array and initialization</span></span><br><span class="line">    f = np.zeros((amount,total_capacity+<span class="number">1</span>), dtype=int)</span><br><span class="line">    </span><br><span class="line">    volumes = new_volumes</span><br><span class="line">    worths = new_worths</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,amount):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,total_capacity+<span class="number">1</span>):</span><br><span class="line">            temp = []</span><br><span class="line">            k = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> k*volumes[i] &lt;= j :</span><br><span class="line">                temp.append(f[i<span class="number">-1</span>][j-k*volumes[i]]+k*worths[i])</span><br><span class="line">                k+=<span class="number">1</span></span><br><span class="line">            f[i][j] = max(temp)</span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">amount = <span class="number">4</span></span><br><span class="line">total_capacity=<span class="number">10</span></span><br><span class="line">volumes=[<span class="number">0</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">3</span>]</span><br><span class="line">worths=[<span class="number">0</span>,<span class="number">10</span>,<span class="number">40</span>,<span class="number">30</span>,<span class="number">50</span>]</span><br><span class="line">getMaxWorth(amount, total_capacity, volumes, worths)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0],</span><br><span class="line">       [  0,   0,   0,  50,  50,  50, 100, 100, 100, 150, 150]])</span><br></pre></td></tr></table></figure>
+<p>此问题还可以试着输出一下被选择的物品和次数之间的关系，以及如何选择物品可以恰好装满</p>
+<h1 id="3-多重背包问题"><a href="#3-多重背包问题" class="headerlink" title="3 多重背包问题"></a>3 多重背包问题</h1><p>在问题的基础上，增加每件物品的件数，比如，第i种物品最多n[i]件可用。<br>转移状态方程：共有N种物品，假设f[i-1][v]是将前i-1种物品放入容量v中时的最大价值，那么针对第i种物品，它最多可以放入n[i]次，此时的转义方程如下：</p>
+<p>$$<br>f[i][v] = max(f[i-1][v-k<em>c[i]]+k</em>w[i] | 0&lt;=k&lt;=n[i])<br>$$<br>因此，在上面代码的基础上做了一些改变，如下。其中需要注意在逆推得到每件物品的时候，从最后一种物品开始，体积是从V开始并且不是遍历V，而是根据结果动态改变计算出下一次的V<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getMaxWorth</span><span class="params">(amount, total_capacity, volumes, worths, counts)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        amount: the quantity of things  type-int</span></span><br><span class="line"><span class="string">        total_capacity: the volume of backpack  type-int</span></span><br><span class="line"><span class="string">        volumes: the volume of each thing  type-list</span></span><br><span class="line"><span class="string">        worths: the worth of each thing    type-list</span></span><br><span class="line"><span class="string">        counts: the number of each thing type-list</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># create a amount*total_capacity array and initialization</span></span><br><span class="line">    f = np.zeros((amount + <span class="number">1</span>, total_capacity + <span class="number">1</span>), dtype=int)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, amount + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, total_capacity + <span class="number">1</span>):</span><br><span class="line">            temp = []</span><br><span class="line">            k = <span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> k * volumes[i] &lt;= j <span class="keyword">and</span> k &lt;= counts[i]:</span><br><span class="line">                temp.append(f[i - <span class="number">1</span>][j - k * volumes[i]] + k * worths[i])</span><br><span class="line">                k += <span class="number">1</span></span><br><span class="line">            f[i][j] = max(temp)</span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_the_goods</span><span class="params">(f, amount, total_capacity, counts, volumes,worths)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">        f: the f[i][v]</span></span><br><span class="line"><span class="string">        amount: the number of things</span></span><br><span class="line"><span class="string">        return: the goods and its choosed times</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    flag = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(amount, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">        flag = <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="number">1</span>, counts[i] + <span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> total_capacity-k*volumes[i] &gt;= <span class="number">0</span>:</span><br><span class="line">                <span class="comment"># note: the point is to use the state transfer formula to compute the k value</span></span><br><span class="line">                <span class="keyword">while</span> f[i][total_capacity] == f[i - <span class="number">1</span>][total_capacity-k*volumes[i]] + k * worths[i]:</span><br><span class="line">                    total_capacity -= k * volumes[i]</span><br><span class="line">                    print(<span class="string">"第%d件物品取%d件"</span> % (i, k))</span><br><span class="line">                    flag = <span class="literal">True</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">if</span> flag:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">amount = <span class="number">3</span></span><br><span class="line">total_capacity = <span class="number">8</span></span><br><span class="line">volumes = [<span class="number">0</span>, <span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br><span class="line">worths = [<span class="number">0</span>, <span class="number">6</span>,<span class="number">10</span>,<span class="number">20</span>]</span><br><span class="line">counts = [<span class="number">0</span>,<span class="number">10</span>,<span class="number">5</span>,<span class="number">2</span>]</span><br><span class="line">f = getMaxWorth(amount, total_capacity, volumes, worths, counts)</span><br><span class="line">print(f)</span><br><span class="line">get_the_goods(f, amount, total_capacity, counts, volumes,worths)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输出</span><br><span class="line">[[ 0  0  0  0  0  0  0  0  0]</span><br><span class="line"> [ 0  6 12 18 24 30 36 42 48]</span><br><span class="line"> [ 0  6 12 18 24 30 36 42 48]</span><br><span class="line"> [ 0  6 20 26 40 46 52 58 64]]</span><br><span class="line">第3件物品取2件</span><br><span class="line">第1件物品取4件</span><br></pre></td></tr></table></figure>
+<p>根据以上代码可以发现，该算法的时间复杂度是$O(V \times \sum{counts[i]})$（时间复杂度计算：比如第一种物品的时候，会执行$V \times counts[1]$次，第二种物品，程序会执行$V \times counts[2]$次，因此可以得到总的时间复杂度）可以发现时间复杂度与物品的次数有关。  </p>
+<p>该方法可以转化成01背包问题进行思考，就是将第i种物品，如果出现次数为n[i]，此时可以得到一个包含有$\sum{n[i]}$中物品的01背包问题，此时的时间复杂度仍然是$O(V \times \sum{counts[i]})$</p>
+<p>方法：将第i种物品分成若干件物品，其中每件物品有一个系数，这件物品的费用和价值是原来的物品的费用和价值乘以这个系数，使这些系数分别为$1,2,4,…2^{(k-1)}$，其中k应该满足 $n[i]-2^k+1&gt;0$的最大整数，比如，n[i]=13，那么k最大为3，从而得到1,2,4；之后使用n[i]-(1+2+4)得到6，因此可以将这个物品的系数分为1,2,4,6；这样的系数可以表示0~n[i]中的每一个整数，同时n[i]件物品对应的就变成了$log(n[i])$件物品，事件复杂度为$O(V \times \sum{log({n[i]}))}$。</p>
+<p>其中，将背包中对应数量的物品拆分成指定系数的物品代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multiple_pack</span><span class="params">(volumes, worths, counts)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    make the count of goods to different v and w goods</span></span><br><span class="line"><span class="string">    :param volumes: list</span></span><br><span class="line"><span class="string">    :param worths: list</span></span><br><span class="line"><span class="string">    :param counts: list</span></span><br><span class="line"><span class="string">    :return: tuple(list,list,list)</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    v = [<span class="number">0</span>]</span><br><span class="line">    w = [<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(counts)):</span><br><span class="line">        <span class="comment"># get the max value k according to the counts[i]</span></span><br><span class="line">        k = int(math.sqrt(counts[i]))</span><br><span class="line">        <span class="comment"># generate the coeffcient according to k</span></span><br><span class="line">        k_list = [math.pow(<span class="number">2</span>,item) <span class="keyword">for</span> item <span class="keyword">in</span> range(k)]</span><br><span class="line">        k_list.append(counts[i]-sum(k_list))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> k_list:</span><br><span class="line">            v.append(int(item * volumes[i]))</span><br><span class="line">            w.append(int(item * worths[i]))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (v, w)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入</span><br><span class="line">volumes = [0, 1, 2, 2]</span><br><span class="line">worths = [0, 6, 10, 20]</span><br><span class="line">counts = [0, 10, 5, 2]</span><br><span class="line"></span><br><span class="line">输出</span><br><span class="line">[0, 1, 2, 4, 3, 2, 4, 4, 2, 2]  </span><br><span class="line">[0, 6, 12, 24, 18, 10, 20, 20, 20, 20]</span><br></pre></td></tr></table></figure>
+<p>之后使用01背包问题进行求解，代码如下所示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_f_of_01_backpack</span><span class="params">(n, total_capacity, volumes, worths)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param n: the number of goods</span></span><br><span class="line"><span class="string">    :param volumes: list</span></span><br><span class="line"><span class="string">    :param worths: list</span></span><br><span class="line"><span class="string">    :return: f</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># initialization</span></span><br><span class="line">    f = np.zeros((n+<span class="number">1</span>, total_capacity+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment">#repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, n+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, total_capacity+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> j-volumes[i] &gt;= <span class="number">0</span>:</span><br><span class="line">                f[i][j] = max(f[i<span class="number">-1</span>][j], f[i<span class="number">-1</span>][j-volumes[i]]+worths[i])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                f[i][j] = f[i<span class="number">-1</span>][j]</span><br><span class="line">    <span class="keyword">return</span> f</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">输入</span><br><span class="line">n = 9</span><br><span class="line">total_capacity = 8</span><br><span class="line">volumes = [0, 1, 2, 4, 3, 2, 4, 4, 2, 2]  </span><br><span class="line">worths = [0, 6, 12, 24, 18, 10, 20, 20, 20, 20]</span><br><span class="line">输出</span><br><span class="line">[[ 0.  0.  0.  0.  0.  0.  0.  0.  0.]</span><br><span class="line"> [ 0.  6.  6.  6.  6.  6.  6.  6.  6.]</span><br><span class="line"> [ 0.  6. 12. 18. 18. 18. 18. 18. 18.]</span><br><span class="line"> [ 0.  6. 12. 18. 24. 30. 36. 42. 42.]</span><br><span class="line"> [ 0.  6. 12. 18. 24. 30. 36. 42. 48.]</span><br><span class="line"> [ 0.  6. 12. 18. 24. 30. 36. 42. 48.]</span><br><span class="line"> [ 0.  6. 12. 18. 24. 30. 36. 42. 48.]</span><br><span class="line"> [ 0.  6. 12. 18. 24. 30. 36. 42. 48.]</span><br><span class="line"> [ 0.  6. 20. 26. 32. 38. 44. 50. 56.]</span><br><span class="line"> [ 0.  6. 20. 26. 40. 46. 52. 58. 64.]]</span><br></pre></td></tr></table></figure>
+<p>通过逆向推导，可以得到被选择的物品。从最后一个物品开始遍历，直到到达第一个物品，需要注意的是提及V是根据结果进行动态调整的，最开始应该是体积V。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_path_of_01_backpack</span><span class="params">(n,total_capacity, volumes, f)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n, <span class="number">0</span>,<span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">if</span> f[i][total_capacity] != f[i<span class="number">-1</span>][total_capacity]:</span><br><span class="line">            total_capacity -= volumes[i]</span><br><span class="line">            print(i)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输出</span><br><span class="line">9</span><br><span class="line">8</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<p>与上面的第一种方法进行对比可以看出结果是一样的，选择的东西也是一样的，只不过一个是拆开的物品。</p>
+<p>本小结主要是关于将算法的复杂度进行改进，需要特别注意的是“拆分物品”的思想和方法。</p>
+<h1 id="4-混合三种背包问题"><a href="#4-混合三种背包问题" class="headerlink" title="4 混合三种背包问题"></a>4 混合三种背包问题</h1><p>将前面三种背包的问题混合起来，也就是有的物品可以取一次(01背包)，有的物品可以无限次取(完全背包)，有的物品可以取有限次(多重背包问题)。应该怎么求解。我的思路就是有一个存储背包次数的数组，如果可取有限次，就对应的是物品的次数，如果是无限次，就先根据物品的体积和总体积得到每件物品的最大可取次数并填入数组中。</p>
+<h1 id="5-二维费用的背包问题"><a href="#5-二维费用的背包问题" class="headerlink" title="5 二维费用的背包问题"></a>5 二维费用的背包问题</h1><p>对于每件物品，具有两种不同的费用：选择这件物品的时候必须同时付出两种代价，对于每种代价都有一个可以付出的最大值（比如背包容量V和<em>最多可取物品数量M</em>），问怎样选择物品可以达到最大价值。设第i件物品的两种代价分别为a[i]和b[i]，两种代价的最大值为V，M。</p>
+<p>思路：<strong>费用增加一维，只需状态增加一维即可</strong>.设f[i][v][m]表示前i件物品付出v和m代价时的最大价值，那么状态转移方程如下：</p>
+<p>$$<br>f[i][v][m] = max{f[i-1][v][m], f[i-1][v-a[i]][m-b[i]]+w[i]}<br>$$<br>当然，和前面的方法一样，也能使用二维数组来解决：当每件物品只可以取一次的时候，变量v，m逆序循环，当物品可以取无限次的时候，可以采用顺序的循环。当物品有如多重背包问题的时候，可以拆分物品，然后使用01背包问题求解。</p>
+<h2 id="5-1-使用三维数组解决问题"><a href="#5-1-使用三维数组解决问题" class="headerlink" title="5.1 使用三维数组解决问题"></a>5.1 使用三维数组解决问题</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2-dimensional cost knapsack problem</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 0-1 knapsack problem: two-dimensional array and one-dimensional array are used to resolve this problem</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">knapsack_2_array</span><span class="params">(N, V, M, A, B,  W)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    :param N: the number of goods</span></span><br><span class="line"><span class="string">    :param V: the total volume1 of goods</span></span><br><span class="line"><span class="string">    :param M: the total volume2 of goods</span></span><br><span class="line"><span class="string">    :param A: the volume1 of each goods  type-list</span></span><br><span class="line"><span class="string">    :param B: the volume2 of each goods  type-list</span></span><br><span class="line"><span class="string">    :param W: the weight of each goods type-list</span></span><br><span class="line"><span class="string">    :return:</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># initialization</span></span><br><span class="line">    f = np.zeros((V+<span class="number">1</span>, M+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># initialization for just full of M</span></span><br><span class="line">    <span class="comment"># f = np.zeros((V+1, M+1))</span></span><br><span class="line">    <span class="comment"># for i in range(V+1):</span></span><br><span class="line">    <span class="comment">#     for j in range(M+1):</span></span><br><span class="line">    <span class="comment">#         if j == 0:</span></span><br><span class="line">    <span class="comment">#             f[i][j] = 0</span></span><br><span class="line">    <span class="comment">#         else:</span></span><br><span class="line">    <span class="comment">#             f[i][j] = float('-inf')</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># repeat</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, N+<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(V, <span class="number">0</span>,<span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> range(M, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">                <span class="keyword">if</span> j-A[i] &gt;= <span class="number">0</span> <span class="keyword">and</span> k-B[i] &gt;= <span class="number">0</span>:</span><br><span class="line">                    f[j][k] = max(f[j][k], f[j-A[i]][k-B[i]]+W[i])</span><br><span class="line">        <span class="comment"># print(f)</span></span><br><span class="line">    <span class="keyword">return</span> f</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_choosed_goods</span><span class="params">(N, V, M, A, B, W, f)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N, <span class="number">0</span>, <span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">if</span> f[V][M] == f[V-A[i]][M-B[i]]+W[i] <span class="keyword">and</span> f[V][M] != float(<span class="string">'-inf'</span>) <span class="keyword">and</span> f[V-A[i]][M-B[i]] != float(<span class="string">'-inf'</span>):</span><br><span class="line">            V -= A[i]</span><br><span class="line">            M -= B[i]</span><br><span class="line">            print(i)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    N = <span class="number">5</span></span><br><span class="line">    V = <span class="number">10</span></span><br><span class="line">    M = <span class="number">10</span></span><br><span class="line">    A = [<span class="number">0</span>,<span class="number">6</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">    B = [<span class="number">0</span>, <span class="number">8</span>,<span class="number">4</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">    W = [<span class="number">0</span>,<span class="number">8</span>,<span class="number">10</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">5</span>]</span><br><span class="line">    f1 = knapsack_2_array(N, V, M, A, B, W)</span><br><span class="line">    print(f1)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">如果没有要求背包恰好装满，初始化的时候全部初始化为0即可，那么输出结果是：</span><br><span class="line">[[ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.]</span><br><span class="line"> [ 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.]</span><br><span class="line"> [ 0.  0.  5.  5.  5.  5.  5.  5.  5.  5.  5.]</span><br><span class="line"> [ 0.  0.  5.  5.  5.  5.  5.  5.  5.  5.  5.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 10. 10. 10. 10. 10.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 10. 10. 10. 10. 10.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 15. 15.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 15. 15.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 15. 15.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 15. 20. 20.]</span><br><span class="line"> [ 0.  0.  5.  5. 10. 10. 15. 15. 19. 20. 20.]]</span><br><span class="line"></span><br><span class="line">5 4 2</span><br><span class="line"></span><br><span class="line">如果要求恰好装满M，也就是M=0的这一列为0，其余位-inf，那么初始化的结果为：</span><br><span class="line">[[  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]]</span><br><span class="line">输出结果</span><br><span class="line">[[  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf -inf -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf   5. -inf -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5. -inf -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5.  10. -inf -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10. -inf -inf -inf -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15. -inf   8. -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15.  15.   8. -inf -inf]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15.  15.   8. -inf  13.]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15.  15.   8.  20.  13.]</span><br><span class="line"> [  0. -inf   5.   5.  10.  10.  15.  15.  19.  20.  13.]]</span><br><span class="line"> 被选择的物品</span><br><span class="line"> 4 1</span><br></pre></td></tr></table></figure>
+<p>注意在输出被选择的物品的时候，是需要逆序输出的，同时需要注意存在float(‘-inf’) = float(‘-inf’)+10,也就是inf与一个数的和与inf相等，因此需要在输出的时候注意值是否为inf</p>
+<p>思考：如何保证恰好满足V和M？该如何进行初始化？？</p>
+<h1 id="6-分组的背包问题"><a href="#6-分组的背包问题" class="headerlink" title="6 分组的背包问题"></a>6 分组的背包问题</h1><p>有N件物品和一个容量为V的背包，第i件物品的体积和价值分别为c[i]和w[i]。这些物品被划分为若干组，每组中的物品相互冲突，最多选择一件。求解将哪些物品装入背包的时候可以使这些物品的体积总和不超过背包容量，且可以取得最大的价值。</p>
+<p>思路：因为物品划分成了组，所以就以组作为索引，而不是物品。则问题可以描述为，针对第k组，选择本组中的某一件还是一件都不选。f[k][v]表示前k组在体积为v的时候取得的最大价值，那么状态转移方程为：</p>
+<p>$$<br>f[k][v] = max{f[k-1][v], f[k-1][v-c[i]]+w[i]| i是第k组中的物品}<br>$$</p>
+<p>核心代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for k in 1--&gt;K:</span><br><span class="line">    for v in V--&gt;0:</span><br><span class="line">        # 对于k组中的每一个物品</span><br><span class="line">        for i in k:</span><br><span class="line">            f[v] = max&#123;f[v], f[v-c[i]]+w[i]&#125;</span><br></pre></td></tr></table></figure></p>
+<p>分组背包问题可以使用完全背包问题中的提到的一个简单的优化方法，也就是在每个组中，根据2中的优化方式进行初步的筛选，删除体积大，价值小的物品</p>
+<h1 id="7-有依赖的背包问题"><a href="#7-有依赖的背包问题" class="headerlink" title="7 有依赖的背包问题"></a>7 有依赖的背包问题</h1><p>问题描述：<br>背包问题的物品之间存在某种“依赖”的关系，比如物品i依赖于j，那么表示若选择i物品，那么j物品也一定要被选择（可以理解为j为主件，i为附件，附件可以有多个）。</p>
+<p>思路：<br>首先想到的是，可以将主件和依赖于主件的附件组成一个集合，作为一个物品。但是此时可用的策略比较多，包括不选主件，仅选择主件，选择主件和1个附件，选择主件和2个附件，….，如果有n个附件，那么策略就有2^n+1种，为指数级。</p>
+<p>一种优化：<br>可以对附件集合中的物品做一下优化，删除体积大并且价值小的物品。【S如果附件物品数量较少的时候并且每一个附件只能取一次，那么可能这种优化存在问题，就是也需要选择体积大并且价值小的物品。】</p>
+<p>进一步优化：<br>对附件集合做0-1背包问题，可以得到一个体积从0到V-c[i]是的最大价值数组（i表示第i个主件，V是总体积），从而可以泛化为V-c[i]+1个物品（物品的体积为0到V-c[i],价值为01背包问题求解的最大价值），这样就将主件i的策略从指数级转化为V-c[i]+1种物品。</p>
+<p>因此，对于N件物品，可以得到N个物品组，每一个组中有泛化的V-c[i]+1种物品（他们是互斥的，也就是不能同时取），此时就可以使用6中的分组背包问题求解。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>背包问题到这里就结束了吧，目前还有两讲我大致浏览了一下，准备在做碰到相关题目的时候再来看一下，便于理解。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/03/Algorithms/KnapsackProblems/" data-id="cjtinfpsn005qxw77v4jps5tn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态规划/">动态规划</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/08/python3/sklearn/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          sklearn
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/23/MachineLearningAndDataMining/支持向量机/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">支持向量机</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/C语言/">C语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MachineLearning/">MachineLearning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kaggle/">kaggle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python3/">python3</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/weibo/">weibo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/word2vec/">word2vec</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BP算法/">BP算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IO/">IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KNN/">KNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beautifulsoup/">beautifulsoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collections/">collections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/divide-and-conquer/">divide-and-conquer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/file/">file</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jieba/">jieba</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kaggle/">kaggle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pandas/">pandas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/realize/">realize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sklearn/">sklearn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/snippets/">snippets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weibo/">weibo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiebo/">wiebo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/决策树/">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分类/">分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小demo/">小demo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微博/">微博</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支持向量机/">支持向量机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据分析/">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝叶斯/">贝叶斯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 17.5px;">Algorithm</a> <a href="/tags/BP算法/" style="font-size: 10px;">BP算法</a> <a href="/tags/Bayes/" style="font-size: 10px;">Bayes</a> <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/DL/" style="font-size: 10px;">DL</a> <a href="/tags/EM/" style="font-size: 10px;">EM</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/KNN/" style="font-size: 10px;">KNN</a> <a href="/tags/MachineLearning/" style="font-size: 12.5px;">MachineLearning</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/SPSS/" style="font-size: 10px;">SPSS</a> <a href="/tags/beautifulsoup/" style="font-size: 10px;">beautifulsoup</a> <a href="/tags/collections/" style="font-size: 10px;">collections</a> <a href="/tags/divide-and-conquer/" style="font-size: 10px;">divide-and-conquer</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/jieba/" style="font-size: 10px;">jieba</a> <a href="/tags/k-means/" style="font-size: 10px;">k-means</a> <a href="/tags/kaggle/" style="font-size: 10px;">kaggle</a> <a href="/tags/matplotlib/" style="font-size: 12.5px;">matplotlib</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/pandas/" style="font-size: 10px;">pandas</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/realize/" style="font-size: 10px;">realize</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/sklearn/" style="font-size: 10px;">sklearn</a> <a href="/tags/snippets/" style="font-size: 10px;">snippets</a> <a href="/tags/weibo/" style="font-size: 10px;">weibo</a> <a href="/tags/wiebo/" style="font-size: 10px;">wiebo</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/全概率公式/" style="font-size: 10px;">全概率公式</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/分类/" style="font-size: 12.5px;">分类</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/小demo/" style="font-size: 10px;">小demo</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/微博/" style="font-size: 10px;">微博</a> <a href="/tags/支持向量机/" style="font-size: 10px;">支持向量机</a> <a href="/tags/数据分析/" style="font-size: 10px;">数据分析</a> <a href="/tags/时间复杂度/" style="font-size: 10px;">时间复杂度</a> <a href="/tags/最大似然估计/" style="font-size: 10px;">最大似然估计</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/贝叶斯/" style="font-size: 10px;">贝叶斯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/DivideAndConquer/">Divide and Conquer</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/Dynamic-Planning/">Dynamic Planning</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/python3/word2vec/">word2vec</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/21/Algorithms/算法/">算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

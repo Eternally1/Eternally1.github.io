@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>数据挖掘理论与算法-数据预处理 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 引言　　本周根据学堂在线的数据预处理课程的学习，根据课堂中的理论知识，查阅资料，使用SPSS软件进行相关的操作。课程截图如下：   图1 数据预处理课程截图  在以上数据预处理的相关课程中，我主要使用SPSS分析软件进行了以下工作：  异常值与重复数据检测、类型转换与采样 主成分分析法 线性判别分析在学习相关的主成分分析法和线性判别分析课程之后，了解它们的工作原理。  2. 数据来源　　从U">
+<meta name="keywords" content="数据分析,SPSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据挖掘理论与算法-数据预处理">
+<meta property="og:url" content="http://yoursite.com/2018/08/03/MachineLearningAndDataMining/数据挖掘理论与算法-数据预处理/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 引言　　本周根据学堂在线的数据预处理课程的学习，根据课堂中的理论知识，查阅资料，使用SPSS软件进行相关的操作。课程截图如下：   图1 数据预处理课程截图  在以上数据预处理的相关课程中，我主要使用SPSS分析软件进行了以下工作：  异常值与重复数据检测、类型转换与采样 主成分分析法 线性判别分析在学习相关的主成分分析法和线性判别分析课程之后，了解它们的工作原理。  2. 数据来源　　从U">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/1.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/2.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/3.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/4.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/5.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/6.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/7.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/8.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/9.png">
+<meta property="og:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/10.png">
+<meta property="og:updated_time" content="2018-09-15T07:11:06.446Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据挖掘理论与算法-数据预处理">
+<meta name="twitter:description" content="1. 引言　　本周根据学堂在线的数据预处理课程的学习，根据课堂中的理论知识，查阅资料，使用SPSS软件进行相关的操作。课程截图如下：   图1 数据预处理课程截图  在以上数据预处理的相关课程中，我主要使用SPSS分析软件进行了以下工作：  异常值与重复数据检测、类型转换与采样 主成分分析法 线性判别分析在学习相关的主成分分析法和线性判别分析课程之后，了解它们的工作原理。  2. 数据来源　　从U">
+<meta name="twitter:image" content="http://yoursite.com/images/DataMiningTheory/DataPreprocessing/1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MachineLearningAndDataMining/数据挖掘理论与算法-数据预处理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/03/MachineLearningAndDataMining/数据挖掘理论与算法-数据预处理/" class="article-date">
+  <time datetime="2018-08-03T06:47:29.000Z" itemprop="datePublished">2018-08-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据挖掘/">数据挖掘</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      数据挖掘理论与算法-数据预处理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h1><p>　　本周根据学堂在线的数据预处理课程的学习，根据课堂中的理论知识，查阅资料，使用SPSS软件进行相关的操作。课程截图如下：  </p>
+<div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/1.png" width="200px;" height="300px">图1 数据预处理课程截图</div>
+
+<p>在以上数据预处理的相关课程中，我主要使用SPSS分析软件进行了以下工作：</p>
+<ul>
+<li>异常值与重复数据检测、类型转换与采样</li>
+<li>主成分分析法</li>
+<li>线性判别分析<br>在学习相关的主成分分析法和线性判别分析课程之后，了解它们的工作原理。</li>
+</ul>
+<h1 id="2-数据来源"><a href="#2-数据来源" class="headerlink" title="2. 数据来源"></a>2. 数据来源</h1><p>　　从UCI Machine Learning Repository中下载的最流行的数据集wine，该数据集是用于分类测试的数据集，数据集描述信息如下表：</p>
+<style>
+table th:first-of-type {
+    width: 80px;
+}
+table th:nth-of-type(2) {
+    width: 80px;
+}
+</style>
+
+<table>
+<thead>
+<tr>
+<th>数据量</th>
+<th>178（条）</th>
+<th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>属性数目</td>
+<td>13（个）</td>
+<td>1) Alcohol（乙醇）<br>2) Malic acid（苹果酸）<br>3) Ash（灰分）<br>4) Alkalinity of ash（灰分碱度）<br>5) Magnesium（镁）<br>6) Total phenols（总石碳酸）<br>7) Flavanoids（黄酮）<br>8) Nonflavanoid phenols（非黄酮类）<br>9) Proanthocyanins（花青素）<br>10)Color intensity（颜色强度）<br>11)Hue（色度）<br>12)OD280/OD315 of diluted wines（经稀释之后的吸光度比值）<br>13)Proline（脯氨酸）</td>
+</tr>
+<tr>
+<td>类别</td>
+<td>3（个）</td>
+<td>对应每一类别的数量如下：<br>Class 1:59 <br> Class 2:71  <br>Class 3:48 <br> Total：178</td>
+</tr>
+</tbody>
+</table>
+<p>部分数据图2所示，其中13个属性的值都是连续的。</p>
+<div align="center"><br>    <img src="/images/DataMiningTheory/DataPreprocessing/2.png"><br>    图2 部分数据截图<br></div>
+
+<h1 id="3-数据分析"><a href="#3-数据分析" class="headerlink" title="3. 数据分析"></a>3. 数据分析</h1><h2 id="3-1-异常值与重复数据检测"><a href="#3-1-异常值与重复数据检测" class="headerlink" title="3.1 异常值与重复数据检测"></a>3.1 异常值与重复数据检测</h2><p>　　考虑到所下载的数据集是已经经过处理的数据，因此数据中不包含重复的数据，这里我人为的添加了5条重复数据，之后使用SPSS分析软件进行重复数据的检测。得到所有最后一个匹配个案的指示符为主个案，见下表:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>频率</th>
+<th>百分比</th>
+<th>有效百分比</th>
+<th>累积百分比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重复个案</td>
+<td>5</td>
+<td>2.7</td>
+<td>2.7</td>
+<td>2.7</td>
+</tr>
+<tr>
+<td>有效 主个案</td>
+<td>178</td>
+<td>97.3</td>
+<td>97.3</td>
+<td>100.0</td>
+</tr>
+<tr>
+<td>合计</td>
+<td>183</td>
+<td>100.0</td>
+<td>100.0</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>　　关于异常值的检测课程，里面主要讲了一下离群点对数据的影响，通过查阅《数据挖掘概念与技术》这本书，识别可以的离群点的通常规则是，挑选落在第3个四分位数之上或者第一个四分位数之下至少1.5*IQR处的值，其中IQR是四分位数极差。使用SPSS对Alcohol属性进行离群点的检验，得到数据盒图如图3。</p>
+<div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/3.png" width="400px;" height="400px">图 3 在不同type下Alcohol的盒图</div> 
+
+<p>对盒图做一些说明：</p>
+<ul>
+<li>盒的端点一般在四分位数线上，盒的长度是四分位数的极差IQR；</li>
+<li>中位数用盒内的线标记</li>
+<li>盒外的两条线延伸到最小和最大的观测值。</li>
+</ul>
+<h2 id="3-2-主成分分析法"><a href="#3-2-主成分分析法" class="headerlink" title="3.2 主成分分析法"></a>3.2 主成分分析法</h2><p>　　主成分分析法（PCA）是一种通过降维来简化数据结构的方法，如果把多个变量化为少数几个综合变量，而这几个综合变量可以反映原来多个变量的大部分信息，所含的信息又互相不重叠，即他们之间要相互独立，互不相关。</p>
+<p>　　主成分分析法的基本思想就是，找出P维空间中椭球体的主轴的问题，如图４所示，在二维空间中，数据的分布呈现出一个椭球体的样子，以椭圆的长轴和短轴作为新的坐标轴y1、y2，此时y1和y2已经不再相关（正交），而且大部分点沿y1散开。通过公式推导（公式推导部分没有自己看），可以得出最大变动方向是由特征向量决定，而特征值刻画对应的方差。</p>
+<div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/4.png" width="400px;" height="400px">图 4 二维数据分布图</div> 
+
+
+<p>　　使用SPSS分析软件进行主成分分析法，首先需要对数据进行标准化，之后设置特征根的临界值为0.8，迭代次数设置为50次，得到的解释方差图如图5所示。</p>
+<div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/5.png" width="400px;" height="400px">图 5 主成分分析法–解释总方差</div> 
+
+
+<p>　　其中“合计”一栏表示的是相关系数矩阵的各个特征值，因为设定的临界值为0.8，这里会得到对应的5个主成分。</p>
+ <div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/6.png" width="400px;" height="400px">图 6 主成分分析法–成分矩阵</div> 
+
+<p>　　在图6所示的成分矩阵中，图中的1-5的每一列中显示了每个属性与主成分的相关系数，这5个主成分其实是原先13个变量的线性组合。就第1列为例，主成分的值为Z=0.313*Zscore(Alcohol)-0.532*Zscore(MalicAcid)-0.004*Zscore(Ash)-0.519*Zscore(Megnesium)<br>+0.856*Zscore(TotalPhenols)+….。将这13个属性对应的第一列的值作为系数，系数越大，表示主成分对该变量的代表性越大。</p>
+<h2 id="3-3-线性判别分析"><a href="#3-3-线性判别分析" class="headerlink" title="3.3 线性判别分析"></a>3.3 线性判别分析</h2><p>　　线性判别分析（LDA）是将高纬的模式样本投影到最佳鉴别的矢量空间，以达到抽取分类信息和压缩特征空间维数的效果。<br>　　如图7所示，数据总体上的分布是沿着图中红色剪头的方向，当使用PCA进行降维时，数据会投影到该红色箭头上方向，从而导致无法进行分类。因为PCA是不考虑label，是一种非监督的。</p>
+ <div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/7.png" width="400px;" height="400px">图 7 分类数据点图</div> 
+
+<p>　　针对以上现象，如果是有标签的数据，使用LDA分析，保留对应的分类信息。如图8所示。这两个坐标系中的数据是一样的，从不同的方向进行投影的时候，左边的投影中蓝颜色和红颜色点重叠在一起，无法进行分类。而右边很好的将蓝颜色和红颜色的点进行了区分，因此说明选择不同的投影方向是很重要的。</p>
+ <div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/8.png" width="400px;" height="400px">图 8 不同投影坐标下的分类</div> 
+
+
+<p>　　使用SPSS分析软件进行判别分析。下面只是截取了部分的图形呈现，从图9中可以看出整体的分类效果还是不错的，图10中是详细的分类结果，可以看出有一个是判断错误，本来类别是2，判定为3。整体准确率是99.4%。</p>
+ <div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/9.png" width="400px;" height="400px">图 9 判别函数散点图</div> 
+
+ <div align="center"><img src="/images/DataMiningTheory/DataPreprocessing/10.png" width="400px;" height="400px">图 10 分类结果</div> 
+
+
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><p>　　本周主要采用了SPSS分析工具，针对数据预处理中的一些步骤进行了分析。了解了主成分分析法和线性判别分析的原理，也是用SPSS分析软件对其进行了简单的分析，在一些值的设定上面是参考别人的，可能并不是很适合自己的数据，需要了解每一部分参数的含义。<br>　　整体上，本周初步完成了学堂在线课程的《数据预处理》部分的理论学习和实践，接下来需要完善的是了解每一部分参数的含义，从而更加熟练的使用SPSS分析软件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/08/03/MachineLearningAndDataMining/数据挖掘理论与算法-数据预处理/" data-id="cjtinfpp5000pxw77a417jsg6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据分析/">数据分析</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/08/07/MachineLearningAndDataMining/朴素贝叶斯/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          朴素贝叶斯分类代码实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/27/weibo/从零开始学习爬取微博数据/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">从零开始学习爬取微博数据</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/C语言/">C语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MachineLearning/">MachineLearning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kaggle/">kaggle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python3/">python3</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/weibo/">weibo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/word2vec/">word2vec</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BP算法/">BP算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IO/">IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KNN/">KNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beautifulsoup/">beautifulsoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collections/">collections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/divide-and-conquer/">divide-and-conquer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/file/">file</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jieba/">jieba</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kaggle/">kaggle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pandas/">pandas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/realize/">realize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sklearn/">sklearn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/snippets/">snippets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weibo/">weibo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiebo/">wiebo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/决策树/">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分类/">分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小demo/">小demo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微博/">微博</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支持向量机/">支持向量机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据分析/">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝叶斯/">贝叶斯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 17.5px;">Algorithm</a> <a href="/tags/BP算法/" style="font-size: 10px;">BP算法</a> <a href="/tags/Bayes/" style="font-size: 10px;">Bayes</a> <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/DL/" style="font-size: 10px;">DL</a> <a href="/tags/EM/" style="font-size: 10px;">EM</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/KNN/" style="font-size: 10px;">KNN</a> <a href="/tags/MachineLearning/" style="font-size: 12.5px;">MachineLearning</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/SPSS/" style="font-size: 10px;">SPSS</a> <a href="/tags/beautifulsoup/" style="font-size: 10px;">beautifulsoup</a> <a href="/tags/collections/" style="font-size: 10px;">collections</a> <a href="/tags/divide-and-conquer/" style="font-size: 10px;">divide-and-conquer</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/jieba/" style="font-size: 10px;">jieba</a> <a href="/tags/k-means/" style="font-size: 10px;">k-means</a> <a href="/tags/kaggle/" style="font-size: 10px;">kaggle</a> <a href="/tags/matplotlib/" style="font-size: 12.5px;">matplotlib</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/pandas/" style="font-size: 10px;">pandas</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/realize/" style="font-size: 10px;">realize</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/sklearn/" style="font-size: 10px;">sklearn</a> <a href="/tags/snippets/" style="font-size: 10px;">snippets</a> <a href="/tags/weibo/" style="font-size: 10px;">weibo</a> <a href="/tags/wiebo/" style="font-size: 10px;">wiebo</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/全概率公式/" style="font-size: 10px;">全概率公式</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/分类/" style="font-size: 12.5px;">分类</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/小demo/" style="font-size: 10px;">小demo</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/微博/" style="font-size: 10px;">微博</a> <a href="/tags/支持向量机/" style="font-size: 10px;">支持向量机</a> <a href="/tags/数据分析/" style="font-size: 10px;">数据分析</a> <a href="/tags/时间复杂度/" style="font-size: 10px;">时间复杂度</a> <a href="/tags/最大似然估计/" style="font-size: 10px;">最大似然估计</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/贝叶斯/" style="font-size: 10px;">贝叶斯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/DivideAndConquer/">Divide and Conquer</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/Dynamic-Planning/">Dynamic Planning</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/python3/word2vec/">word2vec</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/21/Algorithms/算法/">算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

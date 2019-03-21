@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-weibo/抓取微博博文主页的博文内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/12/weibo/抓取微博博文主页的博文内容/" class="article-date">
+  <time datetime="2018-10-12T03:01:11.000Z" itemprop="datePublished">2018-10-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/weibo/">weibo</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/12/weibo/抓取微博博文主页的博文内容/">抓取微博博文主页的博文内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>已经只要某篇博文的主页，抓取该博文主页的微博内容。比如已知博文链接如下：<a href="https://weibo.com/2703487521/FgbKng9J7?type=comment" target="_blank" rel="noopener">here</a></p>
+<h1 id="1-抓取数据的流程"><a href="#1-抓取数据的流程" class="headerlink" title="1 抓取数据的流程"></a>1 抓取数据的流程</h1><p>首先，因为上面的链接为网页版的微博链接，数据比较难以获取，需要找到对应的移动端的微博链接地址，然后进行采集分析。通过分析发现，对于网页端的微博，通过对应的如下转换即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">'https://weibo.com/2703487521/FgbKvfC13?type=comment'</span></span><br><span class="line"><span class="comment"># 转换成</span></span><br><span class="line">new_url = <span class="string">'https://m.weibo.cn/2703487521/FgbKvfC13?type=comment'</span></span><br></pre></td></tr></table></figure>
+<p>即将weibo.com转换成m.weibo.cn即可得到对应的移动端的微博博文内容。</p>
+<h2 id="1-1-解析页面"><a href="#1-1-解析页面" class="headerlink" title="1.1 解析页面"></a>1.1 解析页面</h2><p>通过打开上面的new_url链接，通过分析Ajax请求数据，可以发现博文内容对应的URL地址。<br><img src="/images/weibo/weibo_05.png" width="600px" height="100px"></p>
+<p>也就是可以发现对应的数据通过Ajax请求进行传输的，通过对应的Ajax请求的URL地址，然后通过requests获取指定页面的内容，再进行解析即可获得所需要的数据。也就是可以通过上面的url获取对应的id，填写到下面：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 所需要的url地址如下，固定格式是https://m.weibo.cn/statuses/show?id=，也即是将上面的url中的后面一部分内容作为id填写在这里。</span></span><br><span class="line"><span class="comment"># url = 'https://m.weibo.cn/statuses/show?id=FgbKng9J7'</span></span><br></pre></td></tr></table></figure></p>
+<p>以上部分的代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> requests.exceptions <span class="keyword">import</span> RequestException</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">url = <span class="string">'https://weibo.com/2703487521/FgbKvfC13?type=comment'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_id</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="string">"""通过原生的url地址，截取出对应的id"""</span></span><br><span class="line">    url = url.split(<span class="string">'/'</span>)</span><br><span class="line">    id_ = url[<span class="number">-1</span>].split(<span class="string">"?"</span>)[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> id_</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_json_url</span><span class="params">(id_)</span>:</span></span><br><span class="line">    <span class="string">"""通过传入的id组合对应的blog博文json数据的url地址"""</span></span><br><span class="line">    url = <span class="string">'https://m.weibo.cn/statuses/show?id='</span>+id_</span><br><span class="line">    <span class="keyword">return</span> url</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_data</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="string">"""获取并解析成json格式数据"""</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = requests.get(url)</span><br><span class="line">        response.encoding = <span class="string">'utf-8'</span></span><br><span class="line">        <span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">            <span class="keyword">return</span> json.loads(response.text)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">except</span> RequestException <span class="keyword">as</span> e:</span><br><span class="line">        print(<span class="string">'error:'</span>,e)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">id_ = get_id(url)</span><br><span class="line">url = get_json_url(id_)</span><br><span class="line">data = parse_data(url)</span><br></pre></td></tr></table></figure></p>
+<p>因为数据内容较多，这里就不进行展示。目前需要获取的内容有微博发布时间、博文内容<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line">publish_time = data[<span class="string">'data'</span>][<span class="string">'created_at'</span>]</span><br><span class="line">publish_time = time.strftime(<span class="string">"%Y-%m-%d %H:%M:%S"</span>,time.strptime(publish_time,<span class="string">'%a %b %d %H:%M:%S %z %Y'</span>))</span><br><span class="line">content = data[<span class="string">'data'</span>][<span class="string">'raw_text'</span>]</span><br><span class="line"></span><br><span class="line">print(<span class="string">"发布时间为:%s, 微博内容为:%s"</span> % (publish_time, content))</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输出</span><br><span class="line">发布时间为:2017-08-08 21:28:36, 微博内容为:我从初中开始想去九寨沟，各种问题到现在才去，然后就他妈地震了[允悲]人生第一次体会地震</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/12/weibo/抓取微博博文主页的博文内容/" data-id="cjtinfpq2001rxw77igdcuez5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/requests/">requests</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/wiebo/">wiebo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python3/jieba" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/26/python3/jieba/" class="article-date">
+  <time datetime="2018-09-26T07:18:56.000Z" itemprop="datePublished">2018-09-26</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python3/">python3</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/26/python3/jieba/">jieba</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>记录自己在使用python jieba分词工具中遇到的问题。<br>github jieba文档<a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">here</a></p>
+<h1 id="jieba分词词性表"><a href="#jieba分词词性表" class="headerlink" title="jieba分词词性表"></a>jieba分词词性表</h1><p>这里在网上找到了第一分词的词性表，可能不够全面，但是够用了。一般主要是使用 <strong>a ad an d n nr ns nt vn v </strong></p>
+<table>
+<thead>
+<tr>
+<th>Ag</th>
+<th>形语素</th>
+<th>形容词性语素。形容词代码为 a，语素代码ｇ前面置以A。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>形容词</td>
+<td>取英语形容词 adjective的第1个字母。</td>
+</tr>
+<tr>
+<td>ad</td>
+<td>副形词</td>
+<td>直接作状语的形容词。形容词代码 a和副词代码d并在一起。</td>
+</tr>
+<tr>
+<td>an</td>
+<td>名形词</td>
+<td>具有名词功能的形容词。形容词代码 a和名词代码n并在一起。</td>
+</tr>
+<tr>
+<td>b</td>
+<td>区别词</td>
+<td>取汉字“别”的声母。</td>
+</tr>
+<tr>
+<td>c</td>
+<td>连词</td>
+<td>取英语连词 conjunction的第1个字母。</td>
+</tr>
+<tr>
+<td>dg</td>
+<td>副语素</td>
+<td>副词性语素。副词代码为 d，语素代码ｇ前面置以D。</td>
+</tr>
+<tr>
+<td>d</td>
+<td>副词</td>
+<td>取 adverb的第2个字母，因其第1个字母已用于形容词。</td>
+</tr>
+<tr>
+<td>e</td>
+<td>叹词</td>
+<td>取英语叹词 exclamation的第1个字母。</td>
+</tr>
+<tr>
+<td>f</td>
+<td>方位词</td>
+<td>取汉字“方”</td>
+</tr>
+<tr>
+<td>g</td>
+<td>语素</td>
+<td>绝大多数语素都能作为合成词的“词根”，取汉字“根”的声母。</td>
+</tr>
+<tr>
+<td>h</td>
+<td>前接成分</td>
+<td>取英语 head的第1个字母。</td>
+</tr>
+<tr>
+<td>i</td>
+<td>成语</td>
+<td>取英语成语 idiom的第1个字母。</td>
+</tr>
+<tr>
+<td>j</td>
+<td>简称略语</td>
+<td>取汉字“简”的声母。</td>
+</tr>
+<tr>
+<td>k</td>
+<td>后接成分</td>
+<td></td>
+</tr>
+<tr>
+<td>l</td>
+<td>习用语</td>
+<td>习用语尚未成为成语，有点“临时性”，取“临”的声母。</td>
+</tr>
+<tr>
+<td>m</td>
+<td>数词</td>
+<td>取英语 numeral的第3个字母，n，u已有他用。</td>
+</tr>
+<tr>
+<td>Ng</td>
+<td>名语素</td>
+<td>名词性语素。名词代码为 n，语素代码ｇ前面置以N。</td>
+</tr>
+<tr>
+<td>n</td>
+<td>名词</td>
+<td>取英语名词 noun的第1个字母。</td>
+</tr>
+<tr>
+<td>nr</td>
+<td>人名</td>
+<td>名词代码 n和“人(ren)”的声母并在一起。</td>
+</tr>
+<tr>
+<td>ns</td>
+<td>地名</td>
+<td>名词代码 n和处所词代码s并在一起。</td>
+</tr>
+<tr>
+<td>nt</td>
+<td>机构团体</td>
+<td>“团”的声母为 t，名词代码n和t并在一起。</td>
+</tr>
+<tr>
+<td>nz</td>
+<td>其他专名</td>
+<td>“专”的声母的第 1个字母为z，名词代码n和z并在一起。</td>
+</tr>
+<tr>
+<td>o</td>
+<td>拟声词</td>
+<td>取英语拟声词 onomatopoeia的第1个字母。</td>
+</tr>
+<tr>
+<td>p</td>
+<td>介词</td>
+<td>取英语介词 prepositional的第1个字母。</td>
+</tr>
+<tr>
+<td>q</td>
+<td>量词</td>
+<td>取英语 quantity的第1个字母。</td>
+</tr>
+<tr>
+<td>r</td>
+<td>代词</td>
+<td>取英语代词 pronoun的第2个字母,因p已用于介词。</td>
+</tr>
+<tr>
+<td>s</td>
+<td>处所词</td>
+<td>取英语 space的第1个字母。</td>
+</tr>
+<tr>
+<td>tg</td>
+<td>时语素</td>
+<td>时间词性语素。时间词代码为 t,在语素的代码g前面置以T。</td>
+</tr>
+<tr>
+<td>t</td>
+<td>时间词</td>
+<td>取英语 time的第1个字母。</td>
+</tr>
+<tr>
+<td>u</td>
+<td>助词</td>
+<td>取英语助词 auxiliary</td>
+</tr>
+<tr>
+<td>vg</td>
+<td>动语素</td>
+<td>动词性语素。动词代码为 v。在语素的代码g前面置以V。</td>
+</tr>
+<tr>
+<td>v</td>
+<td>动词</td>
+<td>取英语动词 verb的第一个字母。</td>
+</tr>
+<tr>
+<td>vd</td>
+<td>副动词</td>
+<td>直接作状语的动词。动词和副词的代码并在一起。</td>
+</tr>
+<tr>
+<td>vn</td>
+<td>名动词</td>
+<td>指具有名词功能的动词。动词和名词的代码并在一起。</td>
+</tr>
+<tr>
+<td>w</td>
+<td>标点符号</td>
+<td></td>
+</tr>
+<tr>
+<td>x</td>
+<td>非语素字</td>
+<td>非语素字只是一个符号，字母 x通常用于代表未知数、符号。</td>
+</tr>
+<tr>
+<td>y</td>
+<td>语气词</td>
+<td>取汉字“语”的声母。</td>
+</tr>
+<tr>
+<td>z</td>
+<td>状态词</td>
+<td>取汉字“状”的声母的前一个字母。</td>
+</tr>
+<tr>
+<td>un</td>
+<td>未知词</td>
+<td>不可识别词及用户自定义词组。取英文Unkonwn首两个字母。(非北大标准，CSW分词中定义)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="1-基本分词操作"><a href="#1-基本分词操作" class="headerlink" title="1 基本分词操作"></a>1 基本分词操作</h1><p>注意全模式、精确模式的不同区别。</p>
+<h1 id="2-一个较为完整的例子"><a href="#2-一个较为完整的例子" class="headerlink" title="2 一个较为完整的例子"></a>2 一个较为完整的例子</h1><h2 id="2-1-针对单一文档进行的切词和去停用词"><a href="#2-1-针对单一文档进行的切词和去停用词" class="headerlink" title="2.1 针对单一文档进行的切词和去停用词"></a>2.1 针对单一文档进行的切词和去停用词</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"></span><br><span class="line">FILEPATH = <span class="string">r"C:\others\doc\teamAndPersonInfo\研究生\资源库\stopwords\stopwords1.txt"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SplitWord</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, content)</span>:</span></span><br><span class="line">        self.content = content</span><br><span class="line">        self.stopwords = <span class="literal">None</span>   <span class="comment"># stopwords set</span></span><br><span class="line">        self.word_list = <span class="literal">None</span>   <span class="comment"># split word list</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_read_stopwords</span><span class="params">(self, filepath)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        read stopwords file and store in a set</span></span><br><span class="line"><span class="string">        :param filepath:</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        sw_set = set()</span><br><span class="line">        <span class="keyword">with</span> open(filepath, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>)<span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">                sw_set.add(line.strip(<span class="string">'\n'</span>))</span><br><span class="line"></span><br><span class="line">        self.stopwords = sw_set</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_delete_illegal_words</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        delete illegal chars. By analysis and viewing the content, find some chars that are not useful, delete these chars</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        words = [<span class="string">'\u200b'</span>, <span class="string">'\t'</span>, <span class="string">'\n'</span>, <span class="string">'【'</span>, <span class="string">'】'</span>, <span class="string">'展开全文'</span>, <span class="string">'...c'</span>]</span><br><span class="line">        <span class="keyword">for</span> word <span class="keyword">in</span> words:</span><br><span class="line">            self.content.replace(word, <span class="string">""</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">split_stopwords</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># count nouns and verbs</span></span><br><span class="line">        pos = [<span class="string">'a'</span>, <span class="string">'ad'</span>, <span class="string">'an'</span>, <span class="string">'d'</span>, <span class="string">'n'</span>, <span class="string">'nr'</span>, <span class="string">'ns'</span>, <span class="string">'nt'</span>, <span class="string">'vn'</span>, <span class="string">'v'</span>]</span><br><span class="line">        words = pseg.cut(self.content)</span><br><span class="line">        word_list = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> word, flag <span class="keyword">in</span> words:</span><br><span class="line">            <span class="keyword">if</span> flag <span class="keyword">in</span> pos:</span><br><span class="line">                word_list.append(word)</span><br><span class="line"></span><br><span class="line">        self.word_list = word_list</span><br><span class="line">        <span class="keyword">return</span> word_list</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">delete_stopword</span><span class="params">(self, seg_list)</span>:</span></span><br><span class="line">        <span class="string">"""delete stopword """</span></span><br><span class="line">        temp = []</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> seg_list:</span><br><span class="line">            <span class="keyword">if</span> item <span class="keyword">not</span> <span class="keyword">in</span> stopwords:</span><br><span class="line">                temp.append(item)</span><br><span class="line">        self.word_list = temp</span><br><span class="line">        <span class="keyword">return</span> temp</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""processize"""</span></span><br><span class="line">        <span class="comment"># first, read stopwords and delete illegal words</span></span><br><span class="line">        self._read_stopwords()</span><br><span class="line">        self._delete_illegal_words()</span><br><span class="line">        <span class="comment"># second, split content</span></span><br><span class="line">        self.split_stopwords()</span><br><span class="line">        <span class="comment"># third, delete stopwords</span></span><br><span class="line">        self.delete_stopword(self.word_list)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># create a splitWord object</span></span><br><span class="line">    blog = <span class="string">"""</span></span><br><span class="line"><span class="string">    "检察日报：普，被狂犬病咬了怎么违法者应有的惩罚。 \u200b\n\t\t\t...展开全文c"</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    sw = SplitWord(blog)</span><br><span class="line">    split_word_list = sw.split_stopwords()</span><br><span class="line">    print(split_word_list)</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-针对目录下面的文件进行切词去停用词并写入到文件中"><a href="#2-2-针对目录下面的文件进行切词去停用词并写入到文件中" class="headerlink" title="2.2 针对目录下面的文件进行切词去停用词并写入到文件中"></a>2.2 针对目录下面的文件进行切词去停用词并写入到文件中</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对文本文件进行切词，每一行代表一个文档，作为训练文档</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jieba.posseg <span class="keyword">as</span> pseg</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"></span><br><span class="line">direct = os.getcwd()</span><br><span class="line">stopword_path = os.path.join(direct, os.path.normpath(<span class="string">'stopwords1.txt'</span>))</span><br><span class="line">print(stopword_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SplitWord</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.stopwords = <span class="literal">None</span>   <span class="comment"># stopwords set</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 读取停用词文件，并以set形式存储。</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_read_stopwords</span><span class="params">(self, filepath)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        read stopwords file and store in a set</span></span><br><span class="line"><span class="string">        :param filepath:</span></span><br><span class="line"><span class="string">        :return:</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        sw_set = set()</span><br><span class="line">        <span class="keyword">with</span> open(filepath, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>)<span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">                sw_set.add(line.strip(<span class="string">'\n'</span>))</span><br><span class="line"></span><br><span class="line">        self.stopwords = sw_set</span><br><span class="line">        print(<span class="string">"停用词表已经加载完成"</span>, self.stopwords)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 切词并删除停用词，返回以空格间隔的字符串</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">split_and_delete_stopwords</span><span class="params">(self, content)</span>:</span></span><br><span class="line">        <span class="comment"># count nouns and verbs</span></span><br><span class="line">        word_list = []</span><br><span class="line">        seg_list = jieba.cut(content, cut_all=<span class="literal">False</span>)   <span class="comment"># 返回的是一个生成器</span></span><br><span class="line">        <span class="comment"># print(list(seg_list))</span></span><br><span class="line">        <span class="keyword">for</span> word <span class="keyword">in</span> seg_list:</span><br><span class="line">            <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> self.stopwords:</span><br><span class="line">                word_list.append(word)</span><br><span class="line">        <span class="keyword">return</span> <span class="string">" "</span>.join(word_list)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">read_file</span><span class="params">(self, Dir, wordembedding)</span>:</span></span><br><span class="line">        <span class="comment"># 加载停用词表</span></span><br><span class="line">        self._read_stopwords(stopword_path)</span><br><span class="line">        file_word = open(wordembedding, <span class="string">'wt'</span>, encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">        <span class="comment"># 去标点符号，并将中文文本，以单个字的方式保存到文件中</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> os.listdir(Dir):    <span class="comment"># 遍历文件夹下面的每一个文件</span></span><br><span class="line">            new_path = os.path.join(Dir, i)</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">with</span> open(new_path, <span class="string">"r"</span>, encoding=<span class="string">"utf-8"</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    st = f.read()     <span class="comment"># 读取文件内容成一个字符串。</span></span><br><span class="line">                    <span class="comment"># 删除文件中的换行符</span></span><br><span class="line">                    st = st.replace(<span class="string">"\n"</span>, <span class="string">""</span>)</span><br><span class="line">                    <span class="comment"># 对该字符串进行切词和去停用词，得到返回的序列。</span></span><br><span class="line">                    line = self.split_and_delete_stopwords(st)</span><br><span class="line">                    print(line)</span><br><span class="line">                    file_word.write(line)</span><br><span class="line">                    file_word.write(<span class="string">'\n'</span>)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                print(e)</span><br><span class="line">        file_word.close()</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># 创建一个对象</span></span><br><span class="line">    sw = SplitWord()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练文件的目录</span></span><br><span class="line">    Dir = os.path.join(direct, os.path.normpath(<span class="string">'data/train'</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 切词文件保存位置</span></span><br><span class="line">    wordembedding = os.path.join(direct, os.path.normpath(<span class="string">'data/train.dat'</span>))</span><br><span class="line"></span><br><span class="line">    sw.read_file(Dir, wordembedding)</span><br><span class="line">    <span class="comment"># print(sw.stopwords)</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/26/python3/jieba/" data-id="cjtinfpri0049xw77cpp6qr2s" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/">NLP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jieba/">jieba</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kaggle/KNN" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/19/kaggle/KNN/" class="article-date">
+  <time datetime="2018-09-19T12:59:34.000Z" itemprop="datePublished">2018-09-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/MachineLearning/">MachineLearning</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/19/kaggle/KNN/">DigitRecognizer</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>机器学习实战中K-近邻算法的介绍和实现</p>
+<h1 id="1-KNN算法的工作原理和算法特点"><a href="#1-KNN算法的工作原理和算法特点" class="headerlink" title="1 KNN算法的工作原理和算法特点"></a>1 KNN算法的工作原理和算法特点</h1><p>工作原理：</p>
+<ol>
+<li>假设有一个带有标签的样本数据集(训练数据集)，其中每条数据有对应的所属分类。</li>
+<li>当输入一条新的数据的时候，将新数据的每个属性（特征）与样本中的数据的属性进行比较。计算出新数据与样本数据中每条数据的距离，然后按照从小到大对得到的距离进行排序，取出钱k个距离比较小的样本数据对应的标签。</li>
+<li>在k个标签中出现次数最多的分类标签作为新数据的分类</li>
+</ol>
+<p>KNN算法的特点<br>优点：精度高、对异常值不敏感、无数据输入假设【？？】<br>缺点：计算复杂度高、空间复杂度高<br>适用范围：数值型和标称型【看机器学习的数据将这个概念弄清楚】</p>
+<h1 id="2-项目描述"><a href="#2-项目描述" class="headerlink" title="2 项目描述"></a>2 项目描述</h1><p>项目案例1: 优化约会网站的配对效果<br>项目概述<br>海伦使用约会网站寻找约会对象。经过一段时间之后，她发现曾交往过三种类型的人:</p>
+<ul>
+<li>不喜欢的人</li>
+<li>魅力一般的人</li>
+<li>极具魅力的人</li>
+</ul>
+<p>她希望：</p>
+<ol>
+<li>工作日与魅力一般的人约会</li>
+<li>周末与极具魅力的人约会</li>
+<li>不喜欢的人则直接排除掉<br>现在她收集到了一些约会网站未曾记录的数据信息，这更有助于匹配对象的归类。</li>
+</ol>
+<h2 id="2-1-开发流程"><a href="#2-1-开发流程" class="headerlink" title="2.1 开发流程"></a>2.1 开发流程</h2><ol>
+<li>收集数据</li>
+<li>准备数据：使用Python读取数据。</li>
+<li>分析数据：使用Matplotlib画出二维散点图（这个作图主要看数据维数或者选部分属性构图）</li>
+<li>编程实现KNN算法</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/19/kaggle/KNN/" data-id="cjtinfppi0019xw77540bi4nw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KNN/">KNN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-kaggle/DigitRecognizer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/19/kaggle/DigitRecognizer/" class="article-date">
+  <time datetime="2018-09-19T12:59:34.000Z" itemprop="datePublished">2018-09-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/kaggle/">kaggle</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/19/kaggle/DigitRecognizer/">DigitRecognizer</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>这个题目是kaggle中比较基础的一个，因为是首次接触这样的比赛，因此准备从最开始记录自己在查阅资料和解决问题过程中的方法，便于之后整理回顾。</p>
+<h1 id="1-问题描述和数据描述"><a href="#1-问题描述和数据描述" class="headerlink" title="1 问题描述和数据描述"></a>1 问题描述和数据描述</h1><p>MNIST（”修改后的国家标准与技术研究所”）是计算机视觉的事实上的 “hello world” 数据集。自1999年发布以来，手写图像的经典数据集已成为基准分类算法的基础。随着新机器学习技术的出现，MNIST 仍然是研究人员和学习者的可靠资源。<br>在本次比赛中，您的目标是正确 识别数以万计手写图像的数字 。我们策划了一套教程式的内核，涵盖从回归到神经网络的一切。我们鼓励您尝试使用不同的算法来学习第一手什么是有效的，以及技术如何比较。</p>
+<h2 id="1-1-数据描述："><a href="#1-1-数据描述：" class="headerlink" title="1.1 数据描述："></a>1.1 数据描述：</h2><p>每个图像的高度为28个像素，宽度为28个像素，总共为784个像素。 每个像素具有与其相关联的单个像素值，指示该像素的亮度或暗度，较高的数字意味着较暗。 该像素值是0到255之间的整数，包括0和255。  </p>
+<p>训练数据集（train.csv）有785列。 第一列称为“标签”，是用户绘制的数字。 其余列包含关联图像的像素值。  </p>
+<p>训练集中的每个像素列都具有像pixelx这样的名称，其中x是0到783之间的整数，包括0和783。 为了在图像上定位该像素，假设我们已经将x分解为x = i * 28 + j，其中i和j是0到27之间的整数，包括0和27。 然后，pixelx位于28 x 28矩阵的第i行和第j列上（索引为零）。</p>
+<h2 id="1-2-使用KNN进行分类"><a href="#1-2-使用KNN进行分类" class="headerlink" title="1.2 使用KNN进行分类"></a>1.2 使用KNN进行分类</h2><p>【将机器学习实战】中的关于KNN的代码写一遍，然后自己完成这里的项目案例</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/19/kaggle/DigitRecognizer/" data-id="cjtinfppd0014xw77a7gro8i9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kaggle/">kaggle</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Algorithms/贝叶斯公式与最大似然估计" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/" class="article-date">
+  <time datetime="2018-09-15T08:24:28.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/">贝叶斯公式和最大似然估计</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>总结整理贝叶斯公式相关理论知识。</p>
+<h1 id="1-贝叶斯公式"><a href="#1-贝叶斯公式" class="headerlink" title="1 贝叶斯公式"></a>1 贝叶斯公式</h1><p><em>经典贝叶斯公式</em>：$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$，其中P(A)为先验概率，即在得到新数据前某一假设的概率；P(B|A)是似然度，即在该假设下得到这一数据的概率；P(A|B)是后验概率，即在观察到新数据后计算该假设的概率；P(B)为标准化常量，即在任何假设下得到这一数据的概率。</p>
+<p><em>条件概率</em>是指事件A在另外一个事件B已经发生条件下的发生概率，公式如下: $P(A|B) = \frac{P(AB)}{P(B)}$</p>
+<p><em>全概率公式</em>为概率论中的重要公式，它将对一复杂事件A的概率求解问题转化为了在不同情况下发生的简单事件的概率的求和问题。如果事件$B_1,B_2,…B_n$构成一个完备事件组，即他们两两互不相容，其和为全集，并且$P(B_i)$大于0，则对于事件A有如下公式成立：</p>
+<p>$$<br>P(A) = P(AB_1)+P(AB_2)+…+P(AB_n)= P(A|B_1)P(B1)+…+P(A|B_n)P(B_n) \<br>= \sum_{i=1}^nP(B_i)P(A|B_i)<br>$$<br>其中省略了一些推导过程。<br>关于<em>完备事件组</em>，设S为试验E的样本空间，B1，B2，…，Bn为E的一组事件。若(i)Bi ∩ Bj=∅ （i≠j且i、j=1，2，…，n）；(ii)B1∪B2∪…∪Bn=S，则称B1，B2，…，Bn为样本空间S的一个完备事件组。</p>
+<h1 id="1-1-一个栗子"><a href="#1-1-一个栗子" class="headerlink" title="1.1 一个栗子"></a>1.1 一个栗子</h1><p>在夏季，某公园男性穿凉鞋的概率为1/2，女性穿凉鞋的概率为2/3，并且该公园中男女比例通常为2:1，问题：若你在公园中随机遇到一个穿凉鞋的人，请问他的性别为男性或女性的概率分别为多少？</p>
+<p>首先，可以设 A = 男性， B = 女性， X = 穿凉鞋；通过分析，已知两个条件概率P(X|A) = 1/2, P(X|B) = 2/3,先验概率P(A) = 2/3,P(B) = 1/3。根据贝叶斯公式，要计算P(A|X),P(B|X)。</p>
+<p>$$<br>P(A|X) = \frac{P(X|A)P(A)}{P(X)}<br>$$<br>根据上述式子可以发现，分母P(X)无法求得，而分析题目可知A,B构成一个完备事件组，因此可以使用全概率公式:$P(X) = P(X|A)P(A)+P(X|B)P(B)$，计算求得值为5/9，再结合上式子，可得：$P(A|X) = \frac{\frac 1 2* \frac 2 3}{\frac 5 9} = \frac 3 5$。</p>
+<h1 id="2-极大似然估计"><a href="#2-极大似然估计" class="headerlink" title="2 极大似然估计"></a>2 极大似然估计</h1><h2 id="2-1-问题引出"><a href="#2-1-问题引出" class="headerlink" title="2.1 问题引出"></a>2.1 问题引出</h2><p>在实际问题中，我能能获得的数据可能只有有限数目的样本数据，而先验概率P(A)和似然度P(X|A)都是未知的。根据仅有的样本数据进行分类的时候，一种可行的方法就是先对先验概率和似然度进行估计，之后就可以套用贝叶斯分类器。</p>
+<ul>
+<li>先验概率的估计：这个比较简单，可以直接依靠经验、或者使用训练样本中各类出现的频率估计。（比如上面的问题，可以依据经验估计男女比例1:1）</li>
+<li>似然度估计比较难，概率密度函数包含了一个随机变量的全部信息；样本数据可能不多；特征向量x的维度可能很大等等。总之要直接估计类条件概率的密度函数很难。解决的办法就是，把估计完全未知的概率密度转化为估计参数。这里就将概率密度估计问题转化为参数估计问题，极大似然估计就是一种参数估计方法。当然了，概率密度函数的选取很重要，模型正确，在样本区域无穷时，我们会得到较准确的估计值，如果模型都错了，那估计半天的参数，肯定也没啥意义了。</li>
+</ul>
+<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>参数估计问题只是实际问题求解过程中的一种简化方法（由于直接估计条件概率密度函数很困难），所以能够使用极大似然估计方法的样本必须要满足一个假设：训练样本的分析能够代表真是分布，每个样本符合独立同分布。</p>
+<h2 id="2-2-原理"><a href="#2-2-原理" class="headerlink" title="2.2 原理"></a>2.2 原理</h2><p>极大似然估计是利用已知的样本的分布，在使用某个模型的基础上，反推出最有可能导致这样结果的模型参数值。即模型已定，参数未知的方法。</p>
+<p>假设我们有一个随机样本序列<em>X1,X2,…Xn</em>, 每一个<em>Xi</em>的概率（质量）分布函数是 $f(x_i; \theta)$，因此，$X_1, X_2,…X_n$的联合概率密度（质量）函数$L(\theta)$： </p>
+<p>$$<br>L(\theta) = P(X_1=x_1,X_2 = x_2,…X_n=x_n) \<br>= f(x_1;\theta)f(x_2;\theta)…f(x_n,\theta) = \prod_{i=1}^Nf(x_i;\theta)<br>$$</p>
+<p>上面的公式中，第一个等号是联合概率密度函数的定义，第二个等号是因为我们定义了$X_i$是独立的。现在，根据最大似然估计的思想，一个合理的方式是将$L(\theta)$看做是$\theta$的函数，并寻找一个$\theta$让$L(\theta)$的值最大。</p>
+<h3 id="2-2-1-0-1分布"><a href="#2-2-1-0-1分布" class="headerlink" title="2.2.1 0-1分布"></a>2.2.1 0-1分布</h3><p>假设一个袋子装有白球与红球，比例未知，现在抽取10次（每次抽完都放回，保证事件独立性），假设抽到了7次白球和3次红球，在此数据样本条件下，可以采用最大似然估计法求解袋子中白球的比例。</p>
+<p>首先，假设该模型的参数是$\theta$，样本的分布函数为$f(x_i;\theta)$。在上面这个例子中，可以较为清晰的看出是符合0-1分布的，那么<em>模型的参数其实就可以理解为抽到白球的概率为$\theta$</em>。</p>
+<p>$$<br>L(\theta) = P(X_1=x_1,X_2 = x_2,…X_n=x_n) = \theta^7(1-\theta)^3<br>$$<br>对联合概率密度函数求ln函数并求平均似然，之后求导并令导数为0。</p>
+<p>$$<br>\hat{L} = ln(\theta) = ln[\theta^7(1-\theta)^3] \<br>{\hat{L}}^\prime = 7\theta^6(1-\theta)^3-3\theta^7(1-\theta)^2 = 0 \<br>\theta = 0.7<br>$$<br>上面的求导中，省略了分母部分的值。<br>总结：这个例子是符合0-1分布的例子，因此模型的参数$\theta$也就可以理解为抽到白球的概率。</p>
+<h3 id="2-2-2-正态分布"><a href="#2-2-2-正态分布" class="headerlink" title="2.2.2 正态分布"></a>2.2.2 正态分布</h3><p>假设随机选择的学生体重符合未知均值$\mu$和标准差$\sigma$正态分布，随机抽样的10名学生的体重值如下： 115  122  130  127  149  160  152  138  149  180，求$\mu$的最大似然估计，即学生的平均体重。</p>
+<p>首先，$X_i$的概率密度函数是：</p>
+<p>$$<br>f(x_i;\mu,\sigma^2) = \frac{1}{\sigma \sqrt{2\pi}}exp\left[-\frac{(x_i-\mu)^2}{2\sigma^2}\right]<br>$$<br>之后，求联合概率密度函数，也即是似然函数：（具体的公式推导就不展开了）</p>
+<p>$$<br>L(\mu, \sigma) = \sigma^{-n}(2\pi)^{-n/2}exp\left[-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right]<br>$$<br>通过一些处理方法，比如对$L(\theta)$求log函数，然后再对$\mu$求偏导，并令偏导数为0，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}X_i = \bar{X}<br>$$<br>然后，基于给定的样本数据，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}x_i = \frac 1 {10}(115+122+…+180) = 142.2<br>$$</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/" data-id="cjtinfpox000kxw77bt4g5shz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Algorithms/EM算法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/13/Algorithms/EM算法/" class="article-date">
+  <time datetime="2018-09-13T12:41:56.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/13/Algorithms/EM算法/">EM算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>EM(Expectation Maximization Algorithm)最大期望算法，参数是最大似然估计。EM会涉及一些数学知识，比如最大似然估计和Jensen不等式。本文主要包含以下内容：</p>
+<ul>
+<li>最大似然估计</li>
+<li>Jensen不等式</li>
+</ul>
+<h1 id="1-最大似然估计-Maximum-Likelihood-Estimation"><a href="#1-最大似然估计-Maximum-Likelihood-Estimation" class="headerlink" title="1 最大似然估计(Maximum Likelihood Estimation)"></a>1 最大似然估计(Maximum Likelihood Estimation)</h1><p>最大似然估计是一种统计方法，用来求一个样本集的相关概率密度函数的参数。</p>
+<p>假设我们有一个随机样本序列<em>X1,X2,…Xn</em>, 每一个<em>Xi</em>的概率（质量）分布函数是 $f(x_i; \theta)$，因此，$X_1, X_2,…X_n$的联合概率密度（质量）函数$L(\theta)$： </p>
+<p>$$<br>L(\theta) = P(X_1=x_1,X_2 = x_2,…X_n=x_n) \<br>= f(x_1;\theta)f(x_2;\theta)…f(x_n,\theta) = \prod_{i=1}^Nf(x_i;\theta)<br>$$</p>
+<p>上面的公式中，第一个等号是联合概率密度函数的定义，第二个等号是因为我们定义了$X_i$是独立的。现在，根据最大似然估计的思想，一个合理的方式是将$L(\theta)$看做是$\theta$的函数，并寻找一个$\theta$让$L(\theta)$的值最大。</p>
+<h2 id="1-1-举例说明"><a href="#1-1-举例说明" class="headerlink" title="1.1 举例说明"></a>1.1 举例说明</h2><p>假设，我们有一个随机样本$X_1,X_2,…X_n$，其中:</p>
+<ul>
+<li>$X_i=0$表示随机选择的一个学生没有一辆跑车</li>
+<li>$X_i=1$表示随机选择的一个学生拥有一辆跑车  </li>
+</ul>
+<p>假设$X_i$是在未知参数$p$下的独立伯努利随机变量，求得$p$的最大似然估计，即拥有跑车的学生占得比例。也就是说，目前已经知道样本的值$X_1,X_2,…X_n$，同时每一个样本符合伯努利分布，目标是在这种样本出现的时候，拥有跑车的学生占的比例最可能的值。详细内容可以参考<a href="https://onlinecourses.science.psu.edu/stat414/node/191/" target="_blank" rel="noopener">here</a></p>
+<h3 id="另一个例子"><a href="#另一个例子" class="headerlink" title="另一个例子"></a>另一个例子</h3><p>假设随机选择的学生体重符合未知均值$\mu$和标准差$\sigma$正态分布，随机抽样的10名学生的体重值如下： 115  122  130  127  149  160  152  138  149  180，求$\mu$的最大似然估计，即学生的平均体重。</p>
+<p>首先，$X_i$的概率密度函数是：</p>
+<p>$$<br>f(x_i;\mu,\sigma^2) = \frac{1}{\sigma \sqrt{2\pi}}exp\left[-\frac{(x_i-\mu)^2}{2\sigma^2}\right]<br>$$<br>之后，求联合概率密度函数，也即是似然函数：（具体的公式推导就不展开了）</p>
+<p>$$<br>L(\mu, \sigma) = \sigma^{-n}(2\pi)^{-n/2}exp\left[-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right]<br>$$<br>通过一些处理方法，比如对$L(\theta)$求log函数，然后再对$\mu$求偏导，并令偏导数为0，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}X_i = \bar{X}<br>$$<br>然后，基于给定的样本数据，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}x_i = \frac 1 {10}(115+122+…+180) = 142.2<br>$$</p>
+<h1 id="2-Jensen不等式"><a href="#2-Jensen不等式" class="headerlink" title="2 Jensen不等式"></a>2 Jensen不等式</h1><p>Jensen不等式是一个涉及函数凸性质的不等式，首先有如下定义：</p>
+<ul>
+<li>如果在函数图像在区间$I$上的任意两点之间的线段位于图形的上方，那么该函属在区间$I$上是凸的，比如函数$f(x) = x^2$</li>
+<li>如果在函数图像在区间$I$上的任意两点之间的线段位于图形的下方，那么该函属在区间$I$上是凹的，比如函数$f(x) = -x^2$</li>
+</ul>
+<h2 id="2-1-Jensen不等式呈现形式"><a href="#2-1-Jensen不等式呈现形式" class="headerlink" title="2.1 Jensen不等式呈现形式"></a>2.1 Jensen不等式呈现形式</h2><p>当函数$f$在区间$I$上是凸函数的时候，并且$\omega_1,\omega_2…\omega n \geq 0$，则有：</p>
+<p>$$<br>\frac{\omega_1f(x_1)+\omega_2f(x_2)+…+\omega_nf(x_n)}{\omega_1+\omega_2+…+\omega_n} \geq f\left(\frac{\omega_1x_1+\omega_2x_2+…+\omega_nx_n}{\omega_1+\omega_2+…+\omega_n}\right)<br>$$<br>当$\omega_1=\omega_2=…=\omega_n=1$的时候，可以转化成下图中的特殊情况：</p>
+<p>$$<br>\frac{f(x_1)+f(x_2)+…+f(x_n)}{n} \geq f\left(\frac{x_1+x_2+…+x_n}{n}\right)<br>$$</p>
+<p>至于该公式的具体证明，这里就略过了</p>
+<h1 id="3-EM算法"><a href="#3-EM算法" class="headerlink" title="3 EM算法"></a>3 EM算法</h1><p>在已经了解上最大似然估计和Jensen不等式的条件下，开始学习一下EM算法。</p>
+<h2 id="3-1-EM算法简单介绍"><a href="#3-1-EM算法简单介绍" class="headerlink" title="3.1 EM算法简单介绍"></a>3.1 EM算法简单介绍</h2><p>EM算法已经成为不完整数据的统计估计问题的通用工具，或者是可以以类似形式提出的问题，比如混合统计。EM算法是在存在丢失或者隐藏数据的情况下计算最大似然(ML)估计的有效迭代过程，在最大似然估计中，我们希望得到这个观察数据最可能出现时的模型参数。</p>
+<p>概率模型有时既含有观测变量(observable variable)，又含有隐变量或潜在变量（latent variable），如果仅有观测变量，那么给定数据就能用极大似然估计或贝叶斯估计来估计model参数；但是当模型含有隐变量时，需要一种含有隐变量的概率模型参数估计的极大似然方法估计——EM算法</p>
+<p>EM算法由两个步骤组成，分别是E-step和M-step：</p>
+<ul>
+<li>E-step:利用对隐藏变量的现有的估计值，计算其最大似然估计值，使用条件期望来实现</li>
+<li>M-step：假设这些隐藏数据是已知的，最大化似然函数。</li>
+</ul>
+<p>之后使用M-step上找到的参数估计值运用到下一个E-step中，此过程不断迭代。</p>
+<h2 id="3-2-一个例子"><a href="#3-2-一个例子" class="headerlink" title="3.2 一个例子"></a>3.2 一个例子</h2><p>首先，假设我们有两枚硬币，$C_1,C_2$，假设抛硬币$C_1$，头在上的概率为$\theta_1$，假设抛硬币$C_2$，头在上的概率为$\theta_2$，我们需要根据一些试验的结果去得到$\theta_1,\theta_2$的值。</p>
+<p>第一次实验，我们选择了5次硬币，每一个硬币做了10次实验，得到的结果如下图：<br><img src="/images/数据挖掘理论与算法/EM/EM_01.png" width="300px" height="300px"></p>
+<p>将数据进行统计，得到下面的结果：<br><img src="/images/数据挖掘理论与算法/EM/EM_02.png" width="200px" height="300px"></p>
+<p>之后使用这些数据可以估计$\theta_1,\theta_2$的值，计算结果如下：  </p>
+<p>$$<br>\theta_1 = \frac{使用硬币C_1得到的头朝上的次数}{总共使用硬币C_1的次数} = \frac{24}{24+6} = 0.8<br>$$<br>同理可以计算$\theta_2$的值为9/(9+11) = 0.45  </p>
+<p>上面这个问题是我们知道每次使用的硬币，可以使用最大似然估计计算得到结果。如果我们不知道每次使用的硬币，也就是存在隐变量的时候，只是有上面图中的抛硬币的结果。也就是我们不知道每次抛掷的时候的硬币，而是将它们看为是隐藏变量。此时就需要使用EM算法来解决。</p>
+<p>首先，我们初始化隐藏变量的值$\theta_A=0.6,\theta_B=0.5$，也就是知道了抛A硬币的时候，头朝上的可能性是0.6，抛B硬币的时候，头朝上的可能性是0.5，那么现在已经知道了一组数据 H T T T H H T H T H，也就是知道了结果，判断该硬币是A硬币和B硬币的可能性。可以这样理解：<br>A盒子中有10个球，其中6个黑球，4个红球；B盒子中有10个球，5个黑球和5个红球，现在从某个盒子中取10次，得到5个黑球和5个红球，来自于A，B盒子的概率。<br>若是从A盒子中取球，则有：</p>
+<p>$$<br>\frac{C_{10}^50.6^50.4^5}{C_{10}^50.6^50.4^5+C_{10}^50.5^50.5^5} = 0.44914<br>$$<br>这里的$C_{10}^5$可以去掉，因为给定了球的顺序，若H代表黑球，T代表红球，那么就可以理解为，依次取出黑球、红球、红球、红球、黑球…。<br>另一种理解：若使用A硬币，那么出现H T T T H H T H T H的时候，也就是第一次出现H，概率为0.6，第二次出现T，概率为0.4，依次进行累乘，得到 $0.6^5*0.4^5$，同理可以得出使用硬币B的时候，出现这种结果的概率，然后分别计算出A和B的可能性就可以了【没有使用贝叶斯公式】</p>
+<p>之后根据计算出来的A，B硬币的可能性和A，B硬币头朝上的概率，在抛10次的情况下，计算出新的结果，如下图：</p>
+<p><img src="/images/数据挖掘理论与算法/EM/EM_03.png" width="400px" height="300px"></p>
+<p>之后根据这个结果，计算出A，B硬币头朝上的概率，然后更新$\theta_A,\theta_B$，进行第二次迭代。</p>
+<p>本文只是针对EM知识做了一个整体上的理解，关于具体的公式推导以及如何应用到其他场景还存在不足，之后需要逐渐进行补充。同时关于下面的链接中，由于统计学知识的缺陷，下面的EM算法中的推导不怎么理解。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="https://www.cnblogs.com/Gabby/p/5344658.html" target="_blank" rel="noopener">https://www.cnblogs.com/Gabby/p/5344658.html</a></li>
+<li><a href="https://www.cnblogs.com/xieyue/p/4384915.html" target="_blank" rel="noopener">https://www.cnblogs.com/xieyue/p/4384915.html</a> </li>
+<li><a href="https://onlinecourses.science.psu.edu/stat414/node/191/" target="_blank" rel="noopener">https://onlinecourses.science.psu.edu/stat414/node/191/</a> [MLE]</li>
+<li><a href="https://www.cs.utah.edu/~piyush/teaching/EM_algorithm.pdf" target="_blank" rel="noopener">https://www.cs.utah.edu/~piyush/teaching/EM_algorithm.pdf</a> [EM]</li>
+<li><a href="https://ibug.doc.ic.ac.uk/media/uploads/documents/expectation_maximization-1.pdf" target="_blank" rel="noopener">https://ibug.doc.ic.ac.uk/media/uploads/documents/expectation_maximization-1.pdf</a> [EM recommend]</li>
+<li><a href="https://yq.aliyun.com/articles/290862" target="_blank" rel="noopener">https://yq.aliyun.com/articles/290862</a> [EM]</li>
+<li><a href="https://www.cnblogs.com/sxzhou/p/8551547.html[从公式推导上理解EM算法]" target="_blank" rel="noopener">https://www.cnblogs.com/sxzhou/p/8551547.html[从公式推导上理解EM算法]</a></li>
+<li><a href="https://blog.csdn.net/u011954647/article/details/53205664[The" target="_blank" rel="noopener">https://blog.csdn.net/u011954647/article/details/53205664[The</a> EM algorithm and extensions][这是一篇中文的博客，里面是EM算法的详细讲解]</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/13/Algorithms/EM算法/" data-id="cjtinfpr70041xw77a4sxgka8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/EM/">EM</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-MachineLearningAndDataMining/聚类" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/13/MachineLearningAndDataMining/聚类/" class="article-date">
+  <time datetime="2018-09-13T00:27:01.000Z" itemprop="datePublished">2018-09-13</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据挖掘/">数据挖掘</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/13/MachineLearningAndDataMining/聚类/">聚类</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>聚类是一种非监督学习，k-means聚类是一种常用的聚类算法，本文将通过Python实现k-means聚类。具体比较详细的理论介绍这里就不进行说明，可以参考《机器学习》——周志华中的第九章，本文更注重实现。</p>
+<h1 id="1-k-means聚类算法步骤"><a href="#1-k-means聚类算法步骤" class="headerlink" title="1 k-means聚类算法步骤"></a>1 k-means聚类算法步骤</h1><p>首先，我们有一些数据x1,x2,x3,…xn和聚类簇数K。</p>
+<ol>
+<li>随机选择K个点作为聚类的中心</li>
+<li>通过计算每个点和聚类中心的距离，从而将改变分配到距离最小的聚类簇中</li>
+<li>计算新的聚类中心，通过计算聚类簇中点的平均值</li>
+<li>重复2和3直到任何群集分配没有改变</li>
+</ol>
+<h1 id="2-使用python实现"><a href="#2-使用python实现" class="headerlink" title="2 使用python实现"></a>2 使用python实现</h1><p>首先，加载一些python包和读取数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> deepcopy</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.rcParams[<span class="string">'figure.figsize'</span>] = (<span class="number">16</span>,<span class="number">9</span>)</span><br><span class="line">plt.style.use(<span class="string">'ggplot'</span>)</span><br><span class="line"></span><br><span class="line">dataset_filepath = <span class="string">r'C:\others\doc\data mining\xclara.csv'</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># importing the dataset</span></span><br><span class="line">data = pd.read_csv(open(dataset_filepath))</span><br><span class="line">print(data.shape)</span><br><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+<p>(3000,2)</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>V1</th>
+<th>v2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2.072345</td>
+<td>-3.241693</td>
+</tr>
+<tr>
+<td>1</td>
+<td>17.936710</td>
+<td>15.784810</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1.083576</td>
+<td>7.319176</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11.120670</td>
+<td>14.406780</td>
+</tr>
+<tr>
+<td>4</td>
+<td>23.711550</td>
+<td>2.557729</td>
+</tr>
+</tbody>
+</table>
+<p>因为数据是二维的，可以绘制出图形看一下。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot scatter</span></span><br><span class="line">f1 = data[<span class="string">'V1'</span>].values</span><br><span class="line">f2 = data[<span class="string">'V2'</span>].values</span><br><span class="line">X = np.array(list(zip(f1,f2)))</span><br><span class="line">plt.scatter(f1, f2, c=<span class="string">'k'</span>, s=<span class="number">7</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/DataMiningTheory/Cluster/scatter_01.png" width="600px" height="400px"></p>
+<p>接着，定义欧几里得距离公式计算方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Euclidean Distance Caculator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist</span><span class="params">(a, b, ax=<span class="number">1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> np.linalg.norm(<span class="number">1</span>-b,axis=ax)</span><br></pre></td></tr></table></figure></p>
+<p>初始化聚类簇的中心<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cluster numbers</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line"><span class="comment"># random centroid of X</span></span><br><span class="line">c_x = np.random.randint(<span class="number">0</span>, np.max(X)<span class="number">-20</span>, size=k)</span><br><span class="line"><span class="comment"># random centroid of Y</span></span><br><span class="line">c_y = np.random.randint(<span class="number">0</span>, np.max(X)<span class="number">-20</span>,size=k)</span><br><span class="line">C = np.array(list(zip(c_x,c_y)), dtype=np.float32)</span><br></pre></td></tr></table></figure></p>
+<p>在图中显示出数据点和初始聚类中心的位置<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plt.scatter(f1, f2,c=<span class="string">'k'</span>,s=<span class="number">7</span>)</span><br><span class="line">plt.scatter(c_x, c_y, c=<span class="string">'r'</span>, s=<span class="number">200</span>, marker=<span class="string">'*'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/DataMiningTheory/Cluster/scatter_02.png" width="600px" height="400px"></p>
+<p>关键代码，迭代直到聚类簇分配没有变化的时候停止<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># store the value of centroids when it updates</span></span><br><span class="line">c_old = np.zeros(C.shape)</span><br><span class="line"><span class="comment">#cluster Lables(0,1,2), to store the cluster label of each sample point </span></span><br><span class="line">clusters = np.zeros(len(X))</span><br><span class="line"></span><br><span class="line"><span class="comment"># error -- distance between new centroids and old centroids</span></span><br><span class="line">error = dist(C, c_old, <span class="literal">None</span>)</span><br><span class="line">print(error)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Loop will run until the error becomes zero</span></span><br><span class="line"><span class="keyword">while</span> error != <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># Assigning each point to its closest cluster</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(X)):</span><br><span class="line">        distances = dist(X[i], C)</span><br><span class="line">        cluster = np.argmin(distances)</span><br><span class="line">        clusters[i] = cluster</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#store the old centroid values</span></span><br><span class="line">    c_old = deepcopy(C)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># find the new centroids by taking the average value</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(k):</span><br><span class="line">        points = [X[j] <span class="keyword">for</span> j <span class="keyword">in</span> range(len(X)) <span class="keyword">if</span> clusters[j] == i]</span><br><span class="line">        C[i] = np.mean(points, axis=<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line">    error = dist(C, c_old, <span class="literal">None</span>)</span><br><span class="line">    print(error)</span><br></pre></td></tr></table></figure></p>
+<p>做出最后的结果图形，主要是包括不同样本点的颜色显示和聚类簇中心显示<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot scatter and the centroids of clusters</span></span><br><span class="line">colors = [<span class="string">'r'</span>,<span class="string">'g'</span>,<span class="string">'b'</span>,<span class="string">'k'</span>,<span class="string">'c'</span>]</span><br><span class="line">fig, ax = plt.subplots()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(k):</span><br><span class="line">    points = np.array([X[j] <span class="keyword">for</span> j <span class="keyword">in</span> range(len(X)) <span class="keyword">if</span> clusters[j] == i])</span><br><span class="line">    ax.scatter(points[:,<span class="number">0</span>], points[:,<span class="number">1</span>], s= <span class="number">7</span>, c=colors[i])</span><br><span class="line"></span><br><span class="line">ax.scatter(C[:,<span class="number">0</span>],C[:,<span class="number">1</span>], marker=<span class="string">"*"</span>, c=<span class="string">'#050505'</span>, s=<span class="number">200</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/DataMiningTheory/Cluster/scatter_03.png" width="600px" height="400px"></p>
+<h1 id="3-参考链接"><a href="#3-参考链接" class="headerlink" title="3 参考链接"></a>3 参考链接</h1><ul>
+<li><a href="http://python.jobbole.com/88535/" target="_blank" rel="noopener">http://python.jobbole.com/88535/</a>   </li>
+<li><a href="https://www.datacamp.com/community/tutorials/k-means-clustering-python" target="_blank" rel="noopener">https://www.datacamp.com/community/tutorials/k-means-clustering-python</a>   </li>
+<li><a href="https://mubaris.com/2017/10/01/kmeans-clustering-in-python/" target="_blank" rel="noopener">https://mubaris.com/2017/10/01/kmeans-clustering-in-python/</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/13/MachineLearningAndDataMining/聚类/" data-id="cjtinfpp9000xxw77m1uqf2kl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k-means/">k-means</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Algorithms/经典例题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/12/Algorithms/经典例题/" class="article-date">
+  <time datetime="2018-09-12T08:51:31.000Z" itemprop="datePublished">2018-09-12</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/12/Algorithms/经典例题/">经典例题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>收录一些在做在线题的过程中遇到的经典的问题和解决方法，便于之后的复习和回顾。</p>
+<h1 id="1-合唱队"><a href="#1-合唱队" class="headerlink" title="1 合唱队"></a>1 合唱队</h1><p><a href="https://www.nowcoder.com/practice/6d9d69e3898f45169a441632b325c7b4?tpId=37&amp;tqId=21247&amp;tPage=2&amp;rp=&amp;ru=%2Fta%2Fhuawei&amp;qru=%2Fta%2Fhuawei%2Fquestion-ranking" target="_blank" rel="noopener">题目链接</a></p>
+<p>思路：将该序列分成两部分，找出左边部分递增的最大连续序列长度和右边部分的最大连续递减序列长度。将序列分成两部分的位置可以从1开始到序列末尾，关键是如何找最长连续递增或者递减序列。</p>
+<p>一个思路如下：<a href="https://www.nowcoder.com/profile/739478302/codeBookDetail?submissionId=30136183" target="_blank" rel="noopener">分析的比较清楚</a></p>
+<p>和上面具有相同思想的是：两遍最长递增子序列，第一遍从左往右，第二遍从右往左，然后把两遍动态规划的结果相加，取最大的那个，比如8 186 186 150 200 160 130 197 200，第一遍dp的结果是 1 1 1 2 2 1 3 4，第二遍dp的结果为3 3 2 3 2 1 1 1，那么相加最大是5，所以需要出列的同学个数就是8-5+1=4.代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_max_length</span><span class="params">(li)</span>:</span></span><br><span class="line">    seq = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(li))]</span><br><span class="line">    seq[<span class="number">0</span>] = [li[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(li)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">            <span class="keyword">if</span> li[i] &gt; li[j] <span class="keyword">and</span> len(seq[i]) &lt; len(seq[j]) + <span class="number">1</span>:</span><br><span class="line">                seq[i] = seq[j][:]</span><br><span class="line">        seq[i].append(li[i])</span><br><span class="line"></span><br><span class="line">    <span class="comment">#     print(seq)</span></span><br><span class="line">    <span class="keyword">return</span> [len(item) <span class="keyword">for</span> item <span class="keyword">in</span> seq]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_max_length_reverse</span><span class="params">(li)</span>:</span></span><br><span class="line">    <span class="comment"># 为了让元素从后向前进行递增排序，那么可以将序列转换一下，之后可以从前向后递增排序，得到的结果要与之对应，因此结果在逆序一下即可。</span></span><br><span class="line">    li = li[::<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    seq = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(li))]</span><br><span class="line">    seq[<span class="number">0</span>] = [li[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(li)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">            <span class="keyword">if</span> li[i] &gt; li[j] <span class="keyword">and</span> len(seq[i]) &lt; len(seq[j]) + <span class="number">1</span>:</span><br><span class="line">                seq[i] = seq[j][:]</span><br><span class="line">        seq[i].append(li[i])</span><br><span class="line"></span><br><span class="line">    result = [len(item) <span class="keyword">for</span> item <span class="keyword">in</span> seq][::<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_max_length_reverse_01</span><span class="params">(li)</span>:</span></span><br><span class="line">    <span class="comment"># 如果是递减序列的话，对应的修改遍历条件就可以了。</span></span><br><span class="line">    seq = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(li))]</span><br><span class="line">    seq[len(li) - <span class="number">1</span>] = [li[len(li)<span class="number">-1</span>]]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(li) - <span class="number">2</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(li) - <span class="number">1</span>, i, <span class="number">-1</span>):</span><br><span class="line">            <span class="keyword">if</span> li[i] &gt; li[j] <span class="keyword">and</span> len(seq[i]) &lt; len(seq[j]) + <span class="number">1</span>:</span><br><span class="line">                seq[i] = seq[j][:]</span><br><span class="line">        seq[i].append(li[i])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    result = [len(item) <span class="keyword">for</span> item <span class="keyword">in</span> seq]</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">n = int(input())</span><br><span class="line">li = input().split(<span class="string">" "</span>)</span><br><span class="line"></span><br><span class="line">increase_list = get_max_length(li)</span><br><span class="line">decrease_list = get_max_length_reverse_01(li)</span><br><span class="line">result = list(map(<span class="keyword">lambda</span> x: x[<span class="number">0</span>] + x[<span class="number">1</span>], zip(increase_list, decrease_list)))</span><br><span class="line">print(result)</span><br><span class="line">print(n - max(result) + <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是在牛客网上进行提交的时候没有通过，可能的一个原因是给的测试用例存在问题：当n=692的时候，后面的序列长度貌似是693个，这两个值不匹配。</p>
+<h2 id="1-1-最长递增子序列"><a href="#1-1-最长递增子序列" class="headerlink" title="1.1 最长递增子序列"></a>1.1 最长递增子序列</h2><p>从一个给定的序列中找出一个最长的序列，该序列从小到大进行排序。比如：一个给定的序列如下所示：0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15<br>那么，它的最长子序列就是：0, 2, 6, 9, 11, 15</p>
+<p>一种思路如下图，首先组合出所有的可能序列，然后从最长的序列开始，逐步减小为1，找最大的递增子序列，这种方法的时间复杂度较高，如下所示：<br><img src="/images/Algorithm/LIS.png"></p>
+<p>另一种思路就是动态规划：比如针对序列：{3,2,6,4,5,1}，存储在数组D中，<strong>设L[i]存储以第i个元素结尾是的最大序列</strong>，则有:<br>L[0] = [3]  L[1] =  [2]  L[2] = [2,6]  L[3] = [2,4]  L[4] = [2,4,5]  L[5] = [1]<br>使用动态规划的思想，主要是考虑L[i]目前已经求得的L[0]至L[i-1]的基础上进行，判断条件是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">L[i] = max(L[j] | j&lt;i ,D[j]&lt; D[i]) +&quot;D[i]&quot;</span><br></pre></td></tr></table></figure></p>
+<p>代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">arr = [<span class="number">3</span>,<span class="number">2</span>,<span class="number">6</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">1</span>]</span><br><span class="line">L = [[] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(arr))]</span><br><span class="line">print(L)</span><br><span class="line"></span><br><span class="line">L[<span class="number">0</span>] = [arr[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,len(arr)):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(i):</span><br><span class="line">        <span class="keyword">if</span> arr[i] &gt; arr[j] <span class="keyword">and</span> len(L[i]) &lt; (len(L[j])+<span class="number">1</span>):</span><br><span class="line">            L[i] = L[j][:]</span><br><span class="line">    L[i].append(arr[i])</span><br><span class="line"></span><br><span class="line">print(L)</span><br></pre></td></tr></table></figure></p>
+<p>通过上面的结果可以发现，L[2]不是[3,6]，而是[2,6]，这是因为代码中j遍历的时候，先得到[3,6],之后被[2,6]覆盖了。</p>
+<p>【注意】可以看一下《算法分析与设计》中的相关代码，上面的代码应该还存在一定的问题，觉得最好是求最优值（最长公共子序列长度），之后求最优解（最长公共子序列），这样比较符合动态规划的解题过程。</p>
+<h2 id="1-2-最长公共子序列"><a href="#1-2-最长公共子序列" class="headerlink" title="1.2 最长公共子序列"></a>1.2 最长公共子序列</h2><h1 id="2-最长回文字符串"><a href="#2-最长回文字符串" class="headerlink" title="2 最长回文字符串"></a>2 最长回文字符串</h1><h2 id="2-1-判断一个字符串是否为回文字符串"><a href="#2-1-判断一个字符串是否为回文字符串" class="headerlink" title="2.1 判断一个字符串是否为回文字符串"></a>2.1 判断一个字符串是否为回文字符串</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># idea: 将字符串对半分，判断从前到后和从后到前的字符串是否完全一样，如果一样的话就是回文字符串</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_palindromic_str1</span><span class="params">(st)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    judge the st is a Palindromic String or not</span></span><br><span class="line"><span class="string">    :param st: a string</span></span><br><span class="line"><span class="string">    :return: True or False</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    st1 = st[:math.ceil(len(st)/<span class="number">2</span>)]</span><br><span class="line">    st_reverse = st[::<span class="number">-1</span>]</span><br><span class="line">    st2 = st_reverse[:math.ceil(len(st)/<span class="number">2</span>)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> st1 == st2:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># idea: 判断对应位置的元素是否相等</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_palindromic_str2</span><span class="params">(st)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(math.ceil(len(st)/<span class="number">2</span>)):</span><br><span class="line">        <span class="keyword">if</span> st[i] == st[len(st)-i<span class="number">-1</span>]:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-2-求字符串中最长的回文字符串长度"><a href="#2-2-求字符串中最长的回文字符串长度" class="headerlink" title="2.2 求字符串中最长的回文字符串长度"></a>2.2 求字符串中最长的回文字符串长度</h2><p>一种方法是，得到字符串的所有子字符串，然后判断每一个子字符串是不是回文串，从而找到最大的回文串。这种方法时间复杂度较高。</p>
+<p>从中心向两端进行判断，如果以该中心向两端得到的子字符串不是回文串，那就就不用接着向下判断了，需要修改中心，然后接着重复之前的操作。需要注意的是分成中心是奇数和中心是偶数的情况进行讨论。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">st = <span class="string">'aBBab'</span></span><br><span class="line">max_len = <span class="number">0</span></span><br><span class="line"><span class="comment"># i represent the center of palindromic. From one center start,like'abbbac'</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(st)<span class="number">-1</span>):</span><br><span class="line">    temp = <span class="number">0</span></span><br><span class="line">    min_i = i<span class="number">-1</span></span><br><span class="line">    max_i = i+<span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> min_i &gt;= <span class="number">0</span> <span class="keyword">and</span> max_i &lt; len(st) <span class="keyword">and</span> st[min_i] == st[max_i]:</span><br><span class="line">        temp = max_i-min_i+<span class="number">1</span></span><br><span class="line">        min_i -= <span class="number">1</span></span><br><span class="line">        max_i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> temp &gt; max_len:</span><br><span class="line">        max_len = temp</span><br><span class="line"></span><br><span class="line"><span class="comment"># From two center start,like 'aBBab'</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(st)<span class="number">-1</span>):</span><br><span class="line">    temp = <span class="number">0</span></span><br><span class="line">    min_j = j</span><br><span class="line">    max_j = j+<span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> min_j&gt;=<span class="number">0</span> <span class="keyword">and</span> max_j&lt;len(st) <span class="keyword">and</span> st[min_j]==st[max_j]:</span><br><span class="line">        temp = max_j-min_j+<span class="number">1</span></span><br><span class="line">        min_j -= <span class="number">1</span></span><br><span class="line">        max_j +=<span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> temp &gt; max_len:</span><br><span class="line">        max_len = temp</span><br><span class="line"></span><br><span class="line">print(max_len)</span><br></pre></td></tr></table></figure>
+<h1 id="3-兔子繁殖问题"><a href="#3-兔子繁殖问题" class="headerlink" title="3 兔子繁殖问题"></a>3 兔子繁殖问题</h1><p>有一只兔子，从出生后第3个月起每个月都生一只兔子，小兔子长到第三个月后每个月又生一只兔子，假如兔子都不死，问每个月的兔子总数为多少？</p>
+<p>第一个月月底的时候只有一对幼兔，第二个月月底的时候这对幼兔长为成兔，第三个月月底的时候第一队成兔生下幼兔，变为两队兔子。</p>
+<p>分析问题： <a href="https://blog.csdn.net/weixin_38699282/article/details/72827815" target="_blank" rel="noopener">借鉴</a><br>假设将兔子分为三个时期，分别是child youth old，那么可以得到下面的结论：<br>1月：1,0,0  共1<br>2月：0,1,0   1<br>3月：1,0,1   2<br>4月：1,1,1   3<br>5月：2,1,2   5<br>6月：3,2,3   7<br>7月：5,3,5   13<br>…<br>比如第5月，根据第4月知道，在第5月的时候，child为2（一个是old生的兔子，另一个是youth长到old然后生的兔子），youth为1（4月的child为1个），old为2（一个为4月的old，一个为4月的youth–&gt;old）。</p>
+<p>通过分析发现，每个月份的数量符合“斐波那契数列”。使用递归解题比较简单，但是复杂度较高，下面给出程序的非递归解法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># non-recursion method</span></span><br><span class="line"><span class="comment"># idea: use two pointer(prev,next), then continually change them.</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fibo</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> n &lt;= <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line"></span><br><span class="line">    fibo_prev = <span class="number">1</span></span><br><span class="line">    fibo_next = <span class="number">1</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>, n):</span><br><span class="line">        temp = fibo_next</span><br><span class="line">        fibo_next += fibo_prev</span><br><span class="line">        fibo_prev = temp</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fibo_next</span><br><span class="line"></span><br><span class="line">print(fibo(<span class="number">45</span>))</span><br></pre></td></tr></table></figure></p>
+<p>如果使用递归解法，那么计算fibo(45)的时候需要花费的时间是很长的，而非递归方法可以很快的输出结果。</p>
+<h1 id="4-称砝码问题"><a href="#4-称砝码问题" class="headerlink" title="4 称砝码问题"></a>4 称砝码问题</h1><p>现有一组砝码，重量互不相等，分别为m1,m2,m3…mn；<br>每种砝码对应的数量为x1,x2,x3…xn。现在要用这些砝码去称物体的重量(放在同一侧)，问能称出多少种不同的重量。<br>注：称重重量包括0。</p>
+<p>思路：先求出每一种砝码质量的可能组合，之后依次累加得到新的砝码的重量，直至全部组合完成</p>
+<p>举个例子：比如有重量分别为1 2 3的三种砝码，它们的数量分别为2,1,3个，那么，首先得到每一种砝码的质量组合，如第一种砝码，它的质量组合可以为[0, 1, 2]三种，依次计算出三种砝码的质量组合如下：<br>[{0, 1, 2}, {0, 2}, {0, 9, 3, 6}]<br>上面的列表分成3个组，接下来就是需要从每一组中选择1个值，加起来，得到一个和值，计算总共的可能的和值。<br>那么首先可以将第一个组和第二个组进行求和，得到{0, 1, 2, 3, 4}。然后将第二个组和第三个组进行求和，得到{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}。因此总共有14中组合质量。</p>
+<p>代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># num 表示砝码的数量，weights表示每一种砝码的重量（list），quantities表示每一种砝码的数量（list）</span></span><br><span class="line">weights = [int(item) <span class="keyword">for</span> item <span class="keyword">in</span> input().split(<span class="string">" "</span>)]</span><br><span class="line">quantities = [int(item) <span class="keyword">for</span> item <span class="keyword">in</span> input().split(<span class="string">" "</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 存储每一种砝码不同数量时候的重量。</span></span><br><span class="line">fama_l = [set() <span class="keyword">for</span> i <span class="keyword">in</span> range(len(weights))]</span><br><span class="line"><span class="comment"># 计算每一种砝码可能的重量组合，如重量为1，数量为3的砝码可以组合成4中重量[0, 1, 2, 3]</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(weights)):</span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(quantities[i]+<span class="number">1</span>):</span><br><span class="line">        fama_l[i].add(weights[i]*k)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"每一种砝码的重量组合为:"</span>)</span><br><span class="line">print(fama_l)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 首先，将第2种砝码中所有的重量组合加到第一种所有的重量中，得到它们的和，然后赋值给第2种砝码的重量。</span></span><br><span class="line"><span class="comment"># 然后用第3重砝码的重量与第二种砝码的重量每一个进行求和，赋值给第三种砝码的重量。</span></span><br><span class="line">length = len(fama_l)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i &lt; length<span class="number">-1</span>:</span><br><span class="line">    temp = set()</span><br><span class="line">    <span class="keyword">for</span> m <span class="keyword">in</span> fama_l[i]:</span><br><span class="line">        <span class="keyword">for</span> n <span class="keyword">in</span> fama_l[i+<span class="number">1</span>]:</span><br><span class="line">            temp.add(m + n)</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    fama_l[i] = temp</span><br><span class="line">    print(fama_l)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"总共有%d 种重量组合"</span> % len(fama_l[<span class="number">-1</span>]))</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入</span><br><span class="line">1 2 3     # 每一种砝码的重量</span><br><span class="line">2 1 3     # 每一种砝码的数量</span><br><span class="line"></span><br><span class="line">输出</span><br><span class="line">每一种砝码的重量组合为:</span><br><span class="line">[&#123;0, 1, 2&#125;, &#123;0, 2&#125;, &#123;0, 9, 3, 6&#125;]</span><br><span class="line">[&#123;0, 1, 2&#125;, &#123;0, 1, 2, 3, 4&#125;, &#123;0, 9, 3, 6&#125;]</span><br><span class="line">[&#123;0, 1, 2&#125;, &#123;0, 1, 2, 3, 4&#125;, &#123;0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13&#125;]</span><br><span class="line">总共有14 种重量组合</span><br></pre></td></tr></table></figure>
+<h1 id="5-学英语"><a href="#5-学英语" class="headerlink" title="5 学英语"></a>5 学英语</h1><p>题目链接：<a href="https://www.nowcoder.com/practice/1364723563ab43c99f3d38b5abef83bc?tpId=37&amp;tqId=21265&amp;rp=0&amp;ru=/ta/huawei&amp;qru=/ta/huawei/question-ranking" target="_blank" rel="noopener">learnEnglish</a><br>思路：将长数字串从后向前切分成每三个组成的数字串，然后对长度小于等于3的数字字符串进行处理，如12345,可以切分成12,345，然后分别进行处理。具体代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#question: https://www.nowcoder.com/practice/1364723563ab43c99f3d38b5abef83bc?tpId=37&amp;tqId=21265&amp;rp=0&amp;ru=/ta/huawei&amp;qru=/ta/huawei/question-ranking</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 首先，定义数字和英语的对应词表。</span></span><br><span class="line">num_dict = &#123;</span><br><span class="line">    <span class="number">1</span>: <span class="string">'one'</span>,</span><br><span class="line">    <span class="number">2</span>: <span class="string">'two'</span>,</span><br><span class="line">    <span class="number">3</span>: <span class="string">'three'</span>,</span><br><span class="line">    <span class="number">4</span>: <span class="string">'four'</span>,</span><br><span class="line">    <span class="number">5</span>: <span class="string">'five'</span>,</span><br><span class="line">    <span class="number">6</span>: <span class="string">'six'</span>,</span><br><span class="line">    <span class="number">7</span>: <span class="string">'seven'</span>,</span><br><span class="line">    <span class="number">8</span>: <span class="string">'eight'</span>,</span><br><span class="line">    <span class="number">9</span>: <span class="string">'nine'</span>,</span><br><span class="line">    <span class="number">10</span>: <span class="string">'ten'</span>,</span><br><span class="line">    <span class="number">11</span>: <span class="string">'eleven'</span>,</span><br><span class="line">    <span class="number">12</span>: <span class="string">'twelve'</span>,</span><br><span class="line">    <span class="number">13</span>: <span class="string">'thirteen'</span>,</span><br><span class="line">    <span class="number">14</span>: <span class="string">'fourteen'</span>,</span><br><span class="line">    <span class="number">15</span>: <span class="string">'fifteen'</span>,</span><br><span class="line">    <span class="number">16</span>: <span class="string">'sixteen'</span>,</span><br><span class="line">    <span class="number">17</span>: <span class="string">'seventeen'</span>,</span><br><span class="line">    <span class="number">18</span>: <span class="string">'eighteen'</span>,</span><br><span class="line">    <span class="number">19</span>: <span class="string">'nineteen'</span>,</span><br><span class="line">    <span class="number">20</span>: <span class="string">'twenty'</span>,</span><br><span class="line">    <span class="number">30</span>: <span class="string">'thirty'</span>,</span><br><span class="line">    <span class="number">40</span>: <span class="string">'forty'</span>,</span><br><span class="line">    <span class="number">50</span>: <span class="string">'fifty'</span>,</span><br><span class="line">    <span class="number">60</span>: <span class="string">'sixty'</span>,</span><br><span class="line">    <span class="number">70</span>: <span class="string">'seventy'</span>,</span><br><span class="line">    <span class="number">80</span>: <span class="string">'eighty'</span>,</span><br><span class="line">    <span class="number">90</span>: <span class="string">'ninety'</span></span><br><span class="line">&#125;</span><br><span class="line">unit = [<span class="string">'thousand'</span>, <span class="string">'million'</span>, <span class="string">'billion'</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">split_num</span><span class="params">(i)</span>:</span></span><br><span class="line">    <span class="string">"""将数字进行切分，每三个数字组成一组，如12345,可以切分成345,12"""</span></span><br><span class="line">    l = []</span><br><span class="line">    <span class="keyword">while</span> len(i) &gt; <span class="number">3</span>:</span><br><span class="line">        temp = i[<span class="number">-3</span>:]   <span class="comment"># 切分最后3个字符</span></span><br><span class="line">        i = i[:<span class="number">-3</span>]      <span class="comment"># 得到除去最后3个字符的所有字符</span></span><br><span class="line">        l.append(temp)</span><br><span class="line">    l.append(i)</span><br><span class="line">    <span class="keyword">return</span> l</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_res</span><span class="params">(i)</span>:</span></span><br><span class="line">    <span class="string">"""i为int型。将小于3位数字的数以合适的方式表示，比如123表示成one hundred and twenty two"""</span></span><br><span class="line">    h = i // <span class="number">100</span>    <span class="comment"># 百分位上的数</span></span><br><span class="line">    h_y = i % <span class="number">100</span>   <span class="comment"># 除去百分位之后的数</span></span><br><span class="line">    res = <span class="string">""</span></span><br><span class="line">    <span class="keyword">if</span> h != <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 将百分位的数转换成对应的英文字母，然后添加单位hundred和连接词and</span></span><br><span class="line">        res += num_dict[h] + <span class="string">' hundred '</span>+<span class="string">'and '</span></span><br><span class="line"></span><br><span class="line">    s = h_y // <span class="number">10</span>    <span class="comment"># 十分位上的数</span></span><br><span class="line">    s_y = h_y % <span class="number">10</span>   <span class="comment"># 个位数</span></span><br><span class="line">    <span class="keyword">if</span> s &gt; <span class="number">1</span>:        <span class="comment"># 十分位上的数大于1的时候</span></span><br><span class="line">        <span class="keyword">if</span> s_y != <span class="number">0</span>:</span><br><span class="line">            s = int(str(s) + <span class="string">'0'</span>)</span><br><span class="line">            res += num_dict[s] + <span class="string">" "</span> + num_dict[s_y]+<span class="string">" "</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            s = int(str(s) + <span class="string">'0'</span>)</span><br><span class="line">            res += num_dict[s] + <span class="string">" "</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 当十分位上的数为1的时候，此时直接将十位数和个位数联合在一起得到对应的英文字母即可</span></span><br><span class="line">    <span class="keyword">if</span> s == <span class="number">1</span>:</span><br><span class="line">        res += num_dict[h_y] + <span class="string">" "</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> s == <span class="number">0</span>:</span><br><span class="line">        res += num_dict[s_y] + <span class="string">" "</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(str_num)</span>:</span></span><br><span class="line">    <span class="string">"""程序运行入口"""</span></span><br><span class="line">    three_nums = split_num(str_num)</span><br><span class="line">    res = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> str_num, v <span class="keyword">in</span> enumerate(three_nums):</span><br><span class="line">        res = get_res(int(v)) + unit[str_num] + <span class="string">" "</span> + res</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">i = input()</span><br><span class="line">result = run(i)</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure></p>
+<h1 id="6-n皇后问题"><a href="#6-n皇后问题" class="headerlink" title="6 n皇后问题"></a>6 n皇后问题</h1><h2 id="6-1-递归解法"><a href="#6-1-递归解法" class="headerlink" title="6.1 递归解法"></a>6.1 递归解法</h2><p>问题描述可以参考这里 <a href="https://segmentfault.com/a/1190000003733325" target="_blank" rel="noopener">here</a><br>为了不重复的造轮子，分析问题，可以参考这里<a href="https://www.cnblogs.com/pinsily/p/7587178.html" target="_blank" rel="noopener">here</a><br>这里只记录一下自己解题时候遇到的问题和需要注意的地方。</p>
+<p>首先，可以写一个判断(i,j)位置是否是一个可以放置皇后的位置的函数is_correct(i,j),这个方法比较简单。之后是使用递归的方法实现一下，首先第一个皇后的位置是第一列的第一个位置，然后开始找第二列中合适的位置，如果找到，就将该位置的值该为1，然后找第三列、第四列中皇后的位置。如果位置不合适，需要回溯到前面，然后就将该位置的值修改为0就可以了。详细代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># N-Queens question</span></span><br><span class="line"><span class="comment"># reference：https://segmentfault.com/a/1190000003733325</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the number of queens</span></span><br><span class="line">N = <span class="number">8</span></span><br><span class="line">Q = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(N)] <span class="keyword">for</span> j <span class="keyword">in</span> range(N)]</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_correct</span><span class="params">(i, j)</span>:</span></span><br><span class="line">    <span class="comment"># judge (i,j) is or not a correct position to place a queen</span></span><br><span class="line">    <span class="keyword">global</span> N</span><br><span class="line">    <span class="comment"># global Q</span></span><br><span class="line">    <span class="comment"># 1 judge the row</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">if</span> Q[i][k] == <span class="number">1</span> <span class="keyword">and</span> k != j:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 judge the col</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">if</span> Q[k][j] == <span class="number">1</span> <span class="keyword">and</span> k != i:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 judge the upper left</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>),range(j<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 judge the upper right</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i+<span class="number">1</span>, N), range(j<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5 judge the left bottom</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>), range(j+<span class="number">1</span>, N)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># judge the right bottom:</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i+<span class="number">1</span>, N), range(j+<span class="number">1</span>, N)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># use recursion method</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Queue</span><span class="params">(j)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> count</span><br><span class="line">    <span class="comment"># global Q</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">if</span> is_correct(i, j): <span class="comment"># if the position(i,j) is a proper place to place the queen</span></span><br><span class="line">            Q[i][j] = <span class="number">1</span>  <span class="comment"># place the queen</span></span><br><span class="line">            Queue(j+<span class="number">1</span>)   <span class="comment"># go deeper</span></span><br><span class="line">            Q[i][j] = <span class="number">0</span>  <span class="comment"># go back to the previous level</span></span><br><span class="line">    <span class="keyword">if</span> j == N:</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        <span class="comment"># print(Q)</span></span><br><span class="line">Queue(<span class="number">0</span>)</span><br><span class="line">print(count)</span><br></pre></td></tr></table></figure></p>
+<h2 id="6-2-非递归解法"><a href="#6-2-非递归解法" class="headerlink" title="6.2 非递归解法"></a>6.2 非递归解法</h2><p>分析：我们可以尝试在将第一个皇后摆放在第0行第0列，为了不冲突，将第二个皇后摆放在第1行第3列…依次下去<br>然后发现第5行每个位置都有冲突，这说明上面4行肯定不能这么摆放，不然就无解。于是又回到上一行（第4行），找到另一个不冲突的位置。又继续在第5行摆放皇后，如果还不满足，又回到第4行，找另一个不冲突的位置。这个时候，如果第4行已经找不到另一个可以摆放的位置了，那么就又回到上一次（第3行），将皇后摆放在另一个不冲突的位置。然后又开始第4行摆放皇后……这就是回溯法。<br>参考链接<a href="https://blog.csdn.net/zx3517288/article/details/53677857" target="_blank" rel="noopener">here</a> 这篇文章中使用一个栈实现的，比我这里的实现较为简单的多，可以在需要的时候借鉴一下。</p>
+<p>注意：需要一个列表q用来存储对应第i行皇后所在的列，这样当回溯回来的时候，可以接着该列继续往后寻找符合条件的位置。<strong>另一方面，需要在找到一种符合情况的解时，能够将对应位置归0.</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Non Recursion</span></span><br><span class="line"><span class="comment"># N-Queens question</span></span><br><span class="line"><span class="comment"># reference：https://segmentfault.com/a/1190000003733325</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the number of queens</span></span><br><span class="line">N = <span class="number">8</span></span><br><span class="line">Q = [[<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(N)] <span class="keyword">for</span> j <span class="keyword">in</span> range(N)]</span><br><span class="line">count = <span class="number">0</span></span><br><span class="line">q = [<span class="number">-1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(N)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_correct</span><span class="params">(i, j)</span>:</span></span><br><span class="line">    <span class="comment"># judge (i,j) is or not a correct position to place a queen</span></span><br><span class="line">    <span class="keyword">global</span> N</span><br><span class="line">    <span class="comment"># global Q</span></span><br><span class="line">    <span class="comment"># 1 judge the row</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">if</span> Q[i][k] == <span class="number">1</span> <span class="keyword">and</span> k != j:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2 judge the col</span></span><br><span class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(N):</span><br><span class="line">        <span class="keyword">if</span> Q[k][j] == <span class="number">1</span> <span class="keyword">and</span> k != i:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 judge the upper left</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>),range(j<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4 judge the upper right</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i+<span class="number">1</span>, N), range(j<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5 judge the left bottom</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>), range(j+<span class="number">1</span>, N)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># judge the right bottom:</span></span><br><span class="line">    <span class="keyword">for</span> t_i, t_j <span class="keyword">in</span> zip(range(i+<span class="number">1</span>, N), range(j+<span class="number">1</span>, N)):</span><br><span class="line">        <span class="keyword">if</span> Q[t_i][t_j] == <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use recursion method</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Queue</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> count</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; N:</span><br><span class="line">        flag = <span class="number">0</span> <span class="comment"># 判断是否找到了一个符合条件的位置</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(q[i]+<span class="number">1</span>, N):</span><br><span class="line">            <span class="keyword">if</span> is_correct(i, j): <span class="comment"># 如果找到一个符合条件的位置</span></span><br><span class="line">                q[i] = j    <span class="comment"># 使用q记录该位置，便于下一次从该位置之后寻找</span></span><br><span class="line">                Q[i][j] = <span class="number">1</span> <span class="comment"># 该位置标记为1</span></span><br><span class="line">                flag = <span class="number">1</span>  <span class="comment"># 说明找到了符合条件的位置</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> flag == <span class="number">0</span>:   <span class="comment"># 如果没有找到</span></span><br><span class="line">            i -= <span class="number">1</span>   <span class="comment"># 回退到上一层</span></span><br><span class="line">            Q[i][q[i]] = <span class="number">0</span>  <span class="comment"># 注意上一层的对应位置元素需要归0</span></span><br><span class="line">            q[i+<span class="number">1</span>] = <span class="number">-1</span>  <span class="comment"># 表示下一层仍然需要从第0个位置开始遍历</span></span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">-1</span>:  <span class="comment"># 如果已经返回到第0行，说明所有情况都找完了</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">if</span> i == N<span class="number">-1</span>:  <span class="comment"># 如果找到了第N-1行，表示此结果满足条件</span></span><br><span class="line">                print(Q)  <span class="comment"># 输出结果</span></span><br><span class="line">                Q[i][q[i]] = <span class="number">0</span>  <span class="comment"># 这里已经代表找到一种，因此此时的位置应该归0，这样才能接着往后找而不受影响</span></span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Queue()</span><br><span class="line">print(count)</span><br></pre></td></tr></table></figure></p>
+<h1 id="7-喂公子吃饼"><a href="#7-喂公子吃饼" class="headerlink" title="7 喂公子吃饼"></a>7 喂公子吃饼</h1><p>题目描述：刑部尚书家的家丁正在喂包龙星吃饼，家丁每次可以同时喂包龙星吃一个饼或两个饼，请问喂包龙星吃N个饼一共有多少种喂法？（1&lt;=N&lt;=5000）<br>该题和爬楼梯问题一样，就是要到达N级阶梯，只有两种方式，从N-1级和从N-2级到达的。因此可以得到递推公式:</p>
+<p>$$<br>    f(n) = f(n-1)+f(n-2)<br>$$<br>即爬n阶楼梯共有爬n-1阶楼梯和爬n-2阶楼梯所有的走法数的和。</p>
+<p>关键：<strong>本题的关键是大数，当数据过大的时候，可能超出int或者long型的最大表示范围</strong></p>
+<p>主要考虑当数字过大的时候，避免使用递归调用的时间复杂度过高。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">int climbStairs(int n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(n == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        int num1 = <span class="number">1</span>;</span><br><span class="line">        int num2 = <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">for</span>(int i = <span class="number">2</span>;i&lt;n;i++)&#123;</span><br><span class="line">            int tmp = num1 + num2;</span><br><span class="line">            num1 = num2;</span><br><span class="line">            num2 = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num2;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果使用java实现，需要注意使用BigInteger这个包工具，因为范围会超出，全部代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> ACM;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="keyword">import</span> java.math.BigInteger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">acm_j</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BigInteger <span class="title">f</span><span class="params">(<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">	    BigInteger bi1 = <span class="keyword">new</span> BigInteger(<span class="string">"1"</span>);</span><br><span class="line">	    BigInteger bi2 = <span class="keyword">new</span> BigInteger(<span class="string">"2"</span>);</span><br><span class="line">	    BigInteger bi3 = <span class="keyword">new</span> BigInteger(<span class="string">"0"</span>);</span><br><span class="line">	    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">3</span>;i&lt;=n;i++)&#123;</span><br><span class="line">	        bi3 = bi1.add(bi2);</span><br><span class="line">	        bi1 = bi2;</span><br><span class="line">	        bi2 = bi3;</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="keyword">return</span> bi3;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">		Scanner scan = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">		<span class="keyword">while</span>(scan.hasNext())&#123;</span><br><span class="line">			<span class="keyword">int</span> n = scan.nextInt();</span><br><span class="line">			<span class="keyword">if</span>(n&lt;=<span class="number">2</span>)&#123;</span><br><span class="line">				System.out.println(n);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				System.out.println(f(n));</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/12/Algorithms/经典例题/" data-id="cjtinfpsc005dxw77zf84h4pv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Algorithms/时间复杂度和空间复杂度" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/09/Algorithms/时间复杂度和空间复杂度/" class="article-date">
+  <time datetime="2018-09-09T00:44:18.000Z" itemprop="datePublished">2018-09-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/09/Algorithms/时间复杂度和空间复杂度/">时间复杂度和空间复杂度</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>整理时间复杂度和空间复杂度的相关理论知识的计算方法。</p>
+<h1 id="1-时间复杂度"><a href="#1-时间复杂度" class="headerlink" title="1 时间复杂度"></a>1 时间复杂度</h1><p>算法的时间复杂度是一个函数，用于定性描述该算法的运行时间。时间复杂度是用于考察输入值大小（输入值的数量）趋于无穷大时的情况。为了计算时间复杂度，通常会估计算法的操作单元数量，每一个单元的运行时间都是相同的。（详细信息可以参考<a href="https://zh.wikipedia.org/wiki/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6" target="_blank" rel="noopener">这里</a>）</p>
+<h2 id="1-1-常见的时间复杂度"><a href="#1-1-常见的时间复杂度" class="headerlink" title="1.1 常见的时间复杂度"></a>1.1 常见的时间复杂度</h2><h3 id="1-1-1-O-n"><a href="#1-1-1-O-n" class="headerlink" title="1.1.1 O(n)"></a>1.1.1 O(n)</h3><p>如果一个算法的时间复杂度为O(n)，则称这个算法具有线性时间。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">linear</span><span class="params">(n ,A)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        <span class="keyword">if</span> A[i] == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+<p>在上面的程序中，如果第一个元素为0，那么只会执行一次，<strong>在分析时间复杂度的时候，我们应该使用最坏的情况</strong></p>
+<h3 id="1-1-2-O-log-n"><a href="#1-1-2-O-log-n" class="headerlink" title="1.1.2 O(log(n))"></a>1.1.2 O(log(n))</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logarithmic</span><span class="params">(n)</span>:</span></span><br><span class="line">    result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> n&gt;<span class="number">1</span>:</span><br><span class="line">        n //=<span class="number">2</span></span><br><span class="line">        result += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<p>在上面的程序中，因为n每次的值是之前值的一半，可以设n为2的x方，那么总共执行了x次，因此需要找到n与x次数之间的一个关系，log(n) = x,因此时间复杂度就是O(log(n))。</p>
+<p>另一种思考：假设循环次数为t，则n的值为2^t，也就是满足t&lt;2^n，可以得出 t=log(2)(n)，即T(n) = log(2)(n)，可见时间复杂度为O(logn)</p>
+<h3 id="1-1-3-O-n-n"><a href="#1-1-3-O-n-n" class="headerlink" title="1.1.3 O(n*n)"></a>1.1.3 O(n*n)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quadratic</span><span class="params">(n)</span>:</span></span><br><span class="line">    result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(n):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> xrange(i, n):</span><br><span class="line">        result += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<h3 id="1-1-4-O-m-n"><a href="#1-1-4-O-m-n" class="headerlink" title="1.1.4 O(m+n)"></a>1.1.4 O(m+n)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">linear2</span><span class="params">(n, m)</span>:</span></span><br><span class="line">    result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        result += i</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(m):</span><br><span class="line">        result += j</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<h3 id="1-1-5-O-2-n"><a href="#1-1-5-O-2-n" class="headerlink" title="1.1.5 O(2^n)"></a>1.1.5 O(2^n)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Fibonacci</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">elif</span> n == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> Fibonacci(n<span class="number">-1</span>)+Fibonacci(n<span class="number">-2</span>)</span><br></pre></td></tr></table></figure>
+<p>在上面的程序中，计算Fib(n)的时间复杂度就是计算Fib(n-1)的时间复杂度和Fib(n-2)的时间复杂度，然后他们求和的时间复杂度为1，即T(n) = T(n-1)+T(n-2)+1<br>比较直观的理解如下图：图中的c可以理解为计算Fib(1)所需要的计算步数<br><img src="/images/Algorithm/Fibonacci.png" width="800px"></p>
+<p>举个具体的例子:<br><img src="/images/Algorithm/Fibonacci1.png" width="300px"></p>
+<h2 id="1-2-时间复杂度公式"><a href="#1-2-时间复杂度公式" class="headerlink" title="1.2 时间复杂度公式"></a>1.2 时间复杂度公式</h2><p>公式</p>
+<p>$$<br>    O(f(n))+O(g(n)) = O(max{f(n),g(n)}) \<br>    O(f(m))+O(g(n)) = O(f(m)+g(n))  \<br>    O(f(m))<em>O(g(n)) = O(f(m)</em>g(n))   \<br>$$</p>
+<h2 id="1-3-关于递归算法的时间复杂度计算"><a href="#1-3-关于递归算法的时间复杂度计算" class="headerlink" title="1.3 关于递归算法的时间复杂度计算"></a>1.3 关于递归算法的时间复杂度计算</h2><p><img src="/images/Algorithm/time_complexity_01.png" width="800px"></p>
+<h1 id="2-空间复杂度"><a href="#2-空间复杂度" class="headerlink" title="2 空间复杂度"></a>2 空间复杂度</h1><p>算法的空间复杂度是指算法需要消耗的空间资源。计算方法与时间复杂度类似。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/09/Algorithms/时间复杂度和空间复杂度/" data-id="cjtinfpoh000bxw77kqem27uk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python3/matplotlib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/08/python3/matplotlib/" class="article-date">
+  <time datetime="2018-09-08T01:03:50.000Z" itemprop="datePublished">2018-09-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python3/">python3</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/08/python3/matplotlib/">matplotlib</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>matplotlib画图中的一些方法的使用</p>
+<h2 id="1-1-scatter-散点图"><a href="#1-1-scatter-散点图" class="headerlink" title="1.1 scatter 散点图"></a>1.1 scatter 散点图</h2><p>matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None, *, data=None, **kwargs)<br>画y与x的散点图，可以标记成不同的颜色或者大小  </p>
+<ul>
+<li>x，y就分别代表数据，是数组类型</li>
+<li>s 标记的大小 以平方磅为单位的标记面积，指定为下列形式之一：<ul>
+<li>数值标量 ： 以相同的大小绘制所有标记。</li>
+<li>行或列向量 ： 使每个标记具有不同的大小。x、y 和 sz 中的相应元素确定每个标记的位置和面积。sz 的长度必须等于 x 和 y 的长度。</li>
+<li>[] ： 使用 36 平方磅的默认面积。<br>但是行和列向量，[]这两种如何使用？</li>
+</ul>
+</li>
+<li>c 颜色，其中对应如下  b=blue  c=cyan g=green k=black m=magenta r=red w=white y=yellow</li>
+<li>marker 标记样式 ‘o’ 圆圈   ‘+’＋号  等等</li>
+</ul>
+<p>一些具体的使用案例可以参考本博客的<a href="https://eternally1.github.io/2018/09/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/%E8%81%9A%E7%B1%BB/" target="_blank" rel="noopener">聚类</a></p>
+<h2 id="1-2-一些小的方法"><a href="#1-2-一些小的方法" class="headerlink" title="1.2 一些小的方法"></a>1.2 一些小的方法</h2><h3 id="1-2-1-figure-amp-subplots"><a href="#1-2-1-figure-amp-subplots" class="headerlink" title="1.2.1 figure &amp; subplots"></a>1.2.1 figure &amp; subplots</h3><p>plt.figure()用来产生多个图，图片按照顺序增加，需要注意一个概念，当前图和当前坐标。通过下面一个例子了解figure和subplot的使用方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.figure(<span class="number">1</span>)                <span class="comment"># 第一张图</span></span><br><span class="line">plt.subplot(<span class="number">211</span>)             <span class="comment"># 第一张图中的第一张子图</span></span><br><span class="line">plt.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">plt.subplot(<span class="number">212</span>)             <span class="comment"># 第一张图中的第二张子图</span></span><br><span class="line">plt.plot([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">2</span>)                <span class="comment"># 第二张图</span></span><br><span class="line">plt.plot([<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])            <span class="comment"># 默认创建子图subplot(111)</span></span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>)                <span class="comment"># 切换到figure 1 ; 子图subplot(212)仍旧是当前图</span></span><br><span class="line">plt.subplot(<span class="number">211</span>)             <span class="comment"># 令子图subplot(211)成为figure1的当前图</span></span><br><span class="line">plt.title(<span class="string">'Easy as 1,2,3'</span>)   <span class="comment"># 添加subplot 211 的标题</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h4 id="subplots"><a href="#subplots" class="headerlink" title="subplots"></a>subplots</h4><pre><code>matplotlib.pyplot.subplots(nrows=1, ncols=1, sharex=False, sharey=False, squeeze=True, subplot_kw=None, gridspec_kw=None, **fig_kw)
+比较常用的参数也就是前面两个，代表创建的子图的行列数量。返回值是fig和ax，分别表示Figure和Axes的对象，可以看1.5中的matplotlib的详细构造。
+</code></pre><p>一些小的例子，只创建一个axes对象，此时在subplots默认为创建一个Figure和一个axes<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">fig,ax = plt.subplots()</span><br><span class="line">ax.plot([<span class="number">1</span>,<span class="number">2</span>])</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig, (ax1, ax2) = plt.subplots(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">ax1.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">ax2.plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">axes[<span class="number">0</span>,<span class="number">0</span>].plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">axes[<span class="number">1</span>,<span class="number">1</span>].plot([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/subplots_01.png" width="400px" height="300px"></p>
+<h3 id="1-2-2-plt-xlabel-plt-ylabel等"><a href="#1-2-2-plt-xlabel-plt-ylabel等" class="headerlink" title="1.2.2 plt.xlabel  plt.ylabel等"></a>1.2.2 plt.xlabel  plt.ylabel等</h3><p>xlabel   ylabel分别是用来设置坐标系的名称的。</p>
+<h3 id="1-2-3-图例legend"><a href="#1-2-3-图例legend" class="headerlink" title="1.2.3 图例legend"></a>1.2.3 图例legend</h3><p>调用matplotlib.pyplot.legend(*args, **kwargs)可以设置legend,有如下一些参数：</p>
+<ul>
+<li>loc   可选值：best，upper right ， upper left，lower right|left， center right|left, lower center .etc</li>
+<li>fontsize 字体大小，可以设置int或者xx-small x-small small medium large x-large xx-large</li>
+<li>fremeon  False or True  设置图例边框</li>
+<li>edgecolor 设置图例边框颜色  blue  red etc.</li>
+<li>facecolor  设置图例背景颜色，若无边框，参数无效</li>
+<li>title 设置图例标题</li>
+</ul>
+<h3 id="1-2-4-annotate-添加注释"><a href="#1-2-4-annotate-添加注释" class="headerlink" title="1.2.4 annotate 添加注释"></a>1.2.4 annotate 添加注释</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加注释</span></span><br><span class="line"><span class="comment"># 第一个参数是注释的内容</span></span><br><span class="line"><span class="comment"># xy设置箭头尖的坐标</span></span><br><span class="line"><span class="comment"># xytext设置注释内容显示的起始位置</span></span><br><span class="line"><span class="comment"># arrowprops 用来设置箭头</span></span><br><span class="line"><span class="comment"># facecolor 设置箭头的颜色</span></span><br><span class="line"><span class="comment"># headlength 箭头的头的长度</span></span><br><span class="line"><span class="comment"># headwidth 箭头的宽度</span></span><br><span class="line"><span class="comment"># width 箭身的宽度</span></span><br><span class="line">plt.annotate(<span class="string">u"This is a zhushi"</span>, xy = (<span class="number">0</span>, <span class="number">1</span>), xytext = (<span class="number">-4</span>, <span class="number">50</span>),</span><br><span class="line">             arrowprops = dict(facecolor = <span class="string">"r"</span>, headlength = <span class="number">10</span>, headwidth = <span class="number">30</span>, width = <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-5解决中文显示问题"><a href="#1-2-5解决中文显示问题" class="headerlink" title="1.2.5解决中文显示问题"></a>1.2.5解决中文显示问题</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-6-设置坐标轴的可读xticks"><a href="#1-2-6-设置坐标轴的可读xticks" class="headerlink" title="1.2.6 设置坐标轴的可读xticks()"></a>1.2.6 设置坐标轴的可读xticks()</h3><p>这个之后在进行补充。</p>
+<h3 id="1-2-7-matplotlib-inline"><a href="#1-2-7-matplotlib-inline" class="headerlink" title="1.2.7 %matplotlib inline"></a>1.2.7 %matplotlib inline</h3><p>经常会看到这么一行代码<br>%matplotlib inline  </p>
+<p>但是放到自己的IDE环境下运行时，总是报错。<br>在Stack Overflow上看到了一个解释:<br>IPython有一组预定义的“魔术函数”，您可以使用命令行样式语法调用它们。有两种魔法，一种是线导向（line-oriented），另一种是单元导向(cell-oriented)。line magics以%字符作为前缀，其工作方式与操作系统命令行调用非常相似:它们作用于整行,line magics可以返回结果，也可以进行赋值使用；cell magics是以%%开头，它需要出现在单元的第一行，而且是作用于整个单元。  </p>
+<p>使用此方法时，绘制命令的输出将在前端显示，就像Jupyter笔记本一样，直接显示在生成命令的代码单元格的下方，生成的绘图也将存储在笔记本文档中。不过这个方法好像只适用于Jupyter notebook和Jupyter QtConsole。</p>
+<h3 id="1-2-8-rcParams"><a href="#1-2-8-rcParams" class="headerlink" title="1.2.8 rcParams"></a>1.2.8 rcParams</h3><p>matplotlib.rcParams[‘figure.figsize’]  # 图片尺寸<br>plt.rcParams[‘figure.figsize’] = (16, 9)   # 代表16:9这种大小的。或者4:3等 </p>
+<h3 id="1-2-9-style-use"><a href="#1-2-9-style-use" class="headerlink" title="1.2.9 style.use"></a>1.2.9 style.use</h3><p>plt.style.use(“ggplot”)使用自带的样式进行美化<br>plt.style.available  获取所有的自带样式<br>可以对生成的图形进行美化  </p>
+<h2 id="1-3-plot-折线图"><a href="#1-3-plot-折线图" class="headerlink" title="1.3 plot 折线图"></a>1.3 plot 折线图</h2><p>plot([x], y, [fmt], data=None,**kwargs)<br>fmt = ‘[color][marker][line]’设置这个属性可以分别设置颜色，点的样式以及连线的样式。<br>**kwargs中可以是包含关键词的属性：  </p>
+<ul>
+<li>label   用于自动图例的</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">time= [<span class="string">"07-22"</span>,<span class="string">"07-23"</span>,<span class="string">"07-24"</span>,<span class="string">"07-25"</span>,<span class="string">"07-26"</span>,<span class="string">"07-27"</span>,<span class="string">"07-28"</span>]</span><br><span class="line"></span><br><span class="line">counts_baidu = [<span class="number">13879</span>,<span class="number">17886</span>,<span class="number">11305</span>,<span class="number">5961</span>,<span class="number">3086</span>,<span class="number">2331</span>,<span class="number">1680</span>]</span><br><span class="line">counts_weibo = [ <span class="number">14201</span>,<span class="number">19541</span>,<span class="number">9084</span>,<span class="number">6014</span>,<span class="number">4102</span>,<span class="number">1900</span>,<span class="number">1702</span> ]</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>)</span><br><span class="line">plt.xlabel(<span class="string">'time'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'counts'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.plot(time, counts_baidu, <span class="string">'b.-'</span>, label=<span class="string">"baidu"</span>)</span><br><span class="line">plt.plot(time,counts_weibo,<span class="string">'g.--'</span>,label=<span class="string">"weibo"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置legend,前提是需要在plot中添加label属性。</span></span><br><span class="line">plt.legend(loc=<span class="string">"upper right"</span>,fontsize=<span class="number">12</span>,facecolor=<span class="string">'white'</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="1-4-bar-柱状图"><a href="#1-4-bar-柱状图" class="headerlink" title="1.4 bar  柱状图"></a>1.4 bar  柱状图</h2><p>matplotlib.pyplot.bar(*args, **kwargs)<br>参数有如下：<br>       width: 设置柱形条宽度，同时也就设置了柱形条之间的宽度</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br><span class="line"></span><br><span class="line">top_10_nouns = [(<span class="string">'疫苗'</span>, <span class="number">1405</span>), (<span class="string">'长生'</span>, <span class="number">866</span>), (<span class="string">'生物'</span>, <span class="number">455</span>), (<span class="string">'问题'</span>, <span class="number">311</span>), (<span class="string">'事件'</span>, <span class="number">276</span>), (<span class="string">'狂犬病'</span>, <span class="number">176</span>), (<span class="string">'公司'</span>, <span class="number">149</span>), (<span class="string">'记录'</span>, <span class="number">143</span>), (<span class="string">'企业'</span>, <span class="number">125</span>), (<span class="string">'狂犬'</span>, <span class="number">89</span>)]</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'关键词'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'次数'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、determine the value of x and y axis</span></span><br><span class="line">x = [item[<span class="number">0</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line">y = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 use bar function to draw the graph</span></span><br><span class="line">plt.bar(x, y,width=<span class="number">0.6</span>,color=<span class="string">'b'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/bar_01.png" width="400px" height="300px"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># solve the problem that the axis can not display chinese normally</span></span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'SimHei'</span>]</span><br><span class="line"></span><br><span class="line">top_10_nouns = [(<span class="string">'疫苗'</span>, <span class="number">1405</span>), (<span class="string">'长生'</span>, <span class="number">866</span>), (<span class="string">'生物'</span>, <span class="number">455</span>), (<span class="string">'问题'</span>, <span class="number">311</span>), (<span class="string">'事件'</span>, <span class="number">276</span>), (<span class="string">'狂犬病'</span>, <span class="number">176</span>), (<span class="string">'公司'</span>, <span class="number">149</span>), (<span class="string">'记录'</span>, <span class="number">143</span>), (<span class="string">'企业'</span>, <span class="number">125</span>), (<span class="string">'狂犬'</span>, <span class="number">89</span>)]</span><br><span class="line">top_10_verbs = [(<span class="string">'造假'</span>, <span class="number">233</span>), (<span class="string">'接种'</span>, <span class="number">152</span>), (<span class="string">'有'</span>, <span class="number">108</span>), (<span class="string">'相关'</span>, <span class="number">74</span>), (<span class="string">'是否'</span>, <span class="number">70</span>), (<span class="string">'关注'</span>, <span class="number">66</span>), (<span class="string">'能'</span>, <span class="number">52</span>), (<span class="string">'称'</span>, <span class="number">52</span>), (<span class="string">'采购'</span>, <span class="number">52</span>), (<span class="string">'涉事'</span>, <span class="number">45</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># for set xlabels</span></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>)</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">u'关键词'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'次数'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1、determine the value of x and y axis</span></span><br><span class="line">x1 =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>]</span><br><span class="line">labels = [item[<span class="number">0</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line">y1 = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_nouns]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2 use bar function to draw the graph</span></span><br><span class="line">plt.bar(x1, y1,width=<span class="number">0.2</span>,color=<span class="string">'b'</span>,lw=<span class="number">1</span>)</span><br><span class="line">ax.set_xticklabels(labels)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">x2 = [item+<span class="number">0.2</span> <span class="keyword">for</span> item <span class="keyword">in</span> x1]</span><br><span class="line">y2 = [item[<span class="number">1</span>] <span class="keyword">for</span> item <span class="keyword">in</span> top_10_verbs]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">plt.bar(x2, y2,width=<span class="number">0.2</span>,color=<span class="string">'r'</span>,lw=<span class="number">1</span>)</span><br><span class="line">plt.xticks([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/Python/matplotlib/bar_02.png" width="400px" height="300px"></p>
+<h2 id="1-5-关于matplotlib各个图像部分的解释"><a href="#1-5-关于matplotlib各个图像部分的解释" class="headerlink" title="1.5 关于matplotlib各个图像部分的解释"></a>1.5 关于matplotlib各个图像部分的解释</h2><p>可以参考<a href="https://www.cnblogs.com/nju2014/p/5620776.html" target="_blank" rel="noopener">这里</a>,主要是关于figure，axes，subplot之间的关系进行了说明，比较清楚。</p>
+<p>首先一幅Matplotlib的图像组成部分介绍。</p>
+<p>在matplotlib中，整个图像为一个Figure对象。在Figure对象中可以包含一个或者多个Axes对象。每个Axes(ax)对象都是一个拥有自己坐标系统的绘图区域。所属关系如下：<br><img src="/images/Python/matplotlib/figure_01.png" width="400px" height="300px"></p>
+<p>这里有一个系列的matplotlib的教程，可以增加理解。<a href="https://www.cnblogs.com/nju2014/tag/Matplotlib/" target="_blank" rel="noopener">here</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/08/python3/matplotlib/" data-id="cjtinfprl004cxw77gm2p46k1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/C语言/">C语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MachineLearning/">MachineLearning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kaggle/">kaggle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python3/">python3</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/weibo/">weibo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/word2vec/">word2vec</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BP算法/">BP算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IO/">IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KNN/">KNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beautifulsoup/">beautifulsoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collections/">collections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/divide-and-conquer/">divide-and-conquer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/file/">file</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jieba/">jieba</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kaggle/">kaggle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pandas/">pandas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/realize/">realize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sklearn/">sklearn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/snippets/">snippets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weibo/">weibo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiebo/">wiebo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/决策树/">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分类/">分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小demo/">小demo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微博/">微博</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支持向量机/">支持向量机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据分析/">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝叶斯/">贝叶斯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 17.5px;">Algorithm</a> <a href="/tags/BP算法/" style="font-size: 10px;">BP算法</a> <a href="/tags/Bayes/" style="font-size: 10px;">Bayes</a> <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/DL/" style="font-size: 10px;">DL</a> <a href="/tags/EM/" style="font-size: 10px;">EM</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/KNN/" style="font-size: 10px;">KNN</a> <a href="/tags/MachineLearning/" style="font-size: 12.5px;">MachineLearning</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/SPSS/" style="font-size: 10px;">SPSS</a> <a href="/tags/beautifulsoup/" style="font-size: 10px;">beautifulsoup</a> <a href="/tags/collections/" style="font-size: 10px;">collections</a> <a href="/tags/divide-and-conquer/" style="font-size: 10px;">divide-and-conquer</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/jieba/" style="font-size: 10px;">jieba</a> <a href="/tags/k-means/" style="font-size: 10px;">k-means</a> <a href="/tags/kaggle/" style="font-size: 10px;">kaggle</a> <a href="/tags/matplotlib/" style="font-size: 12.5px;">matplotlib</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/pandas/" style="font-size: 10px;">pandas</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/realize/" style="font-size: 10px;">realize</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/sklearn/" style="font-size: 10px;">sklearn</a> <a href="/tags/snippets/" style="font-size: 10px;">snippets</a> <a href="/tags/weibo/" style="font-size: 10px;">weibo</a> <a href="/tags/wiebo/" style="font-size: 10px;">wiebo</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/全概率公式/" style="font-size: 10px;">全概率公式</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/分类/" style="font-size: 12.5px;">分类</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/小demo/" style="font-size: 10px;">小demo</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/微博/" style="font-size: 10px;">微博</a> <a href="/tags/支持向量机/" style="font-size: 10px;">支持向量机</a> <a href="/tags/数据分析/" style="font-size: 10px;">数据分析</a> <a href="/tags/时间复杂度/" style="font-size: 10px;">时间复杂度</a> <a href="/tags/最大似然估计/" style="font-size: 10px;">最大似然估计</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/贝叶斯/" style="font-size: 10px;">贝叶斯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/DivideAndConquer/">Divide and Conquer</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/Dynamic-Planning/">Dynamic Planning</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/python3/word2vec/">word2vec</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/21/Algorithms/算法/">算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

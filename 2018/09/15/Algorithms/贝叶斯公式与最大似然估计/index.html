@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>贝叶斯公式和最大似然估计 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="引言总结整理贝叶斯公式相关理论知识。 1 贝叶斯公式经典贝叶斯公式：$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$，其中P(A)为先验概率，即在得到新数据前某一假设的概率；P(B|A)是似然度，即在该假设下得到这一数据的概率；P(A|B)是后验概率，即在观察到新数据后计算该假设的概率；P(B)为标准化常量，即在任何假设下得到这一数据的概率。 条件概率是指事件A在另外一个事件B">
+<meta name="keywords" content="Algorithm,Bayes,全概率公式,最大似然估计">
+<meta property="og:type" content="article">
+<meta property="og:title" content="贝叶斯公式和最大似然估计">
+<meta property="og:url" content="http://yoursite.com/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="引言总结整理贝叶斯公式相关理论知识。 1 贝叶斯公式经典贝叶斯公式：$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$，其中P(A)为先验概率，即在得到新数据前某一假设的概率；P(B|A)是似然度，即在该假设下得到这一数据的概率；P(A|B)是后验概率，即在观察到新数据后计算该假设的概率；P(B)为标准化常量，即在任何假设下得到这一数据的概率。 条件概率是指事件A在另外一个事件B">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-09-19T08:22:09.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="贝叶斯公式和最大似然估计">
+<meta name="twitter:description" content="引言总结整理贝叶斯公式相关理论知识。 1 贝叶斯公式经典贝叶斯公式：$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$，其中P(A)为先验概率，即在得到新数据前某一假设的概率；P(B|A)是似然度，即在该假设下得到这一数据的概率；P(A|B)是后验概率，即在观察到新数据后计算该假设的概率；P(B)为标准化常量，即在任何假设下得到这一数据的概率。 条件概率是指事件A在另外一个事件B">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Algorithms/贝叶斯公式与最大似然估计" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/" class="article-date">
+  <time datetime="2018-09-15T08:24:28.000Z" itemprop="datePublished">2018-09-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Algorithm/">Algorithm</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      贝叶斯公式和最大似然估计
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>总结整理贝叶斯公式相关理论知识。</p>
+<h1 id="1-贝叶斯公式"><a href="#1-贝叶斯公式" class="headerlink" title="1 贝叶斯公式"></a>1 贝叶斯公式</h1><p><em>经典贝叶斯公式</em>：$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$，其中P(A)为先验概率，即在得到新数据前某一假设的概率；P(B|A)是似然度，即在该假设下得到这一数据的概率；P(A|B)是后验概率，即在观察到新数据后计算该假设的概率；P(B)为标准化常量，即在任何假设下得到这一数据的概率。</p>
+<p><em>条件概率</em>是指事件A在另外一个事件B已经发生条件下的发生概率，公式如下: $P(A|B) = \frac{P(AB)}{P(B)}$</p>
+<p><em>全概率公式</em>为概率论中的重要公式，它将对一复杂事件A的概率求解问题转化为了在不同情况下发生的简单事件的概率的求和问题。如果事件$B_1,B_2,…B_n$构成一个完备事件组，即他们两两互不相容，其和为全集，并且$P(B_i)$大于0，则对于事件A有如下公式成立：</p>
+<p>$$<br>P(A) = P(AB_1)+P(AB_2)+…+P(AB_n)= P(A|B_1)P(B1)+…+P(A|B_n)P(B_n) \<br>= \sum_{i=1}^nP(B_i)P(A|B_i)<br>$$<br>其中省略了一些推导过程。<br>关于<em>完备事件组</em>，设S为试验E的样本空间，B1，B2，…，Bn为E的一组事件。若(i)Bi ∩ Bj=∅ （i≠j且i、j=1，2，…，n）；(ii)B1∪B2∪…∪Bn=S，则称B1，B2，…，Bn为样本空间S的一个完备事件组。</p>
+<h1 id="1-1-一个栗子"><a href="#1-1-一个栗子" class="headerlink" title="1.1 一个栗子"></a>1.1 一个栗子</h1><p>在夏季，某公园男性穿凉鞋的概率为1/2，女性穿凉鞋的概率为2/3，并且该公园中男女比例通常为2:1，问题：若你在公园中随机遇到一个穿凉鞋的人，请问他的性别为男性或女性的概率分别为多少？</p>
+<p>首先，可以设 A = 男性， B = 女性， X = 穿凉鞋；通过分析，已知两个条件概率P(X|A) = 1/2, P(X|B) = 2/3,先验概率P(A) = 2/3,P(B) = 1/3。根据贝叶斯公式，要计算P(A|X),P(B|X)。</p>
+<p>$$<br>P(A|X) = \frac{P(X|A)P(A)}{P(X)}<br>$$<br>根据上述式子可以发现，分母P(X)无法求得，而分析题目可知A,B构成一个完备事件组，因此可以使用全概率公式:$P(X) = P(X|A)P(A)+P(X|B)P(B)$，计算求得值为5/9，再结合上式子，可得：$P(A|X) = \frac{\frac 1 2* \frac 2 3}{\frac 5 9} = \frac 3 5$。</p>
+<h1 id="2-极大似然估计"><a href="#2-极大似然估计" class="headerlink" title="2 极大似然估计"></a>2 极大似然估计</h1><h2 id="2-1-问题引出"><a href="#2-1-问题引出" class="headerlink" title="2.1 问题引出"></a>2.1 问题引出</h2><p>在实际问题中，我能能获得的数据可能只有有限数目的样本数据，而先验概率P(A)和似然度P(X|A)都是未知的。根据仅有的样本数据进行分类的时候，一种可行的方法就是先对先验概率和似然度进行估计，之后就可以套用贝叶斯分类器。</p>
+<ul>
+<li>先验概率的估计：这个比较简单，可以直接依靠经验、或者使用训练样本中各类出现的频率估计。（比如上面的问题，可以依据经验估计男女比例1:1）</li>
+<li>似然度估计比较难，概率密度函数包含了一个随机变量的全部信息；样本数据可能不多；特征向量x的维度可能很大等等。总之要直接估计类条件概率的密度函数很难。解决的办法就是，把估计完全未知的概率密度转化为估计参数。这里就将概率密度估计问题转化为参数估计问题，极大似然估计就是一种参数估计方法。当然了，概率密度函数的选取很重要，模型正确，在样本区域无穷时，我们会得到较准确的估计值，如果模型都错了，那估计半天的参数，肯定也没啥意义了。</li>
+</ul>
+<h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>参数估计问题只是实际问题求解过程中的一种简化方法（由于直接估计条件概率密度函数很困难），所以能够使用极大似然估计方法的样本必须要满足一个假设：训练样本的分析能够代表真是分布，每个样本符合独立同分布。</p>
+<h2 id="2-2-原理"><a href="#2-2-原理" class="headerlink" title="2.2 原理"></a>2.2 原理</h2><p>极大似然估计是利用已知的样本的分布，在使用某个模型的基础上，反推出最有可能导致这样结果的模型参数值。即模型已定，参数未知的方法。</p>
+<p>假设我们有一个随机样本序列<em>X1,X2,…Xn</em>, 每一个<em>Xi</em>的概率（质量）分布函数是 $f(x_i; \theta)$，因此，$X_1, X_2,…X_n$的联合概率密度（质量）函数$L(\theta)$： </p>
+<p>$$<br>L(\theta) = P(X_1=x_1,X_2 = x_2,…X_n=x_n) \<br>= f(x_1;\theta)f(x_2;\theta)…f(x_n,\theta) = \prod_{i=1}^Nf(x_i;\theta)<br>$$</p>
+<p>上面的公式中，第一个等号是联合概率密度函数的定义，第二个等号是因为我们定义了$X_i$是独立的。现在，根据最大似然估计的思想，一个合理的方式是将$L(\theta)$看做是$\theta$的函数，并寻找一个$\theta$让$L(\theta)$的值最大。</p>
+<h3 id="2-2-1-0-1分布"><a href="#2-2-1-0-1分布" class="headerlink" title="2.2.1 0-1分布"></a>2.2.1 0-1分布</h3><p>假设一个袋子装有白球与红球，比例未知，现在抽取10次（每次抽完都放回，保证事件独立性），假设抽到了7次白球和3次红球，在此数据样本条件下，可以采用最大似然估计法求解袋子中白球的比例。</p>
+<p>首先，假设该模型的参数是$\theta$，样本的分布函数为$f(x_i;\theta)$。在上面这个例子中，可以较为清晰的看出是符合0-1分布的，那么<em>模型的参数其实就可以理解为抽到白球的概率为$\theta$</em>。</p>
+<p>$$<br>L(\theta) = P(X_1=x_1,X_2 = x_2,…X_n=x_n) = \theta^7(1-\theta)^3<br>$$<br>对联合概率密度函数求ln函数并求平均似然，之后求导并令导数为0。</p>
+<p>$$<br>\hat{L} = ln(\theta) = ln[\theta^7(1-\theta)^3] \<br>{\hat{L}}^\prime = 7\theta^6(1-\theta)^3-3\theta^7(1-\theta)^2 = 0 \<br>\theta = 0.7<br>$$<br>上面的求导中，省略了分母部分的值。<br>总结：这个例子是符合0-1分布的例子，因此模型的参数$\theta$也就可以理解为抽到白球的概率。</p>
+<h3 id="2-2-2-正态分布"><a href="#2-2-2-正态分布" class="headerlink" title="2.2.2 正态分布"></a>2.2.2 正态分布</h3><p>假设随机选择的学生体重符合未知均值$\mu$和标准差$\sigma$正态分布，随机抽样的10名学生的体重值如下： 115  122  130  127  149  160  152  138  149  180，求$\mu$的最大似然估计，即学生的平均体重。</p>
+<p>首先，$X_i$的概率密度函数是：</p>
+<p>$$<br>f(x_i;\mu,\sigma^2) = \frac{1}{\sigma \sqrt{2\pi}}exp\left[-\frac{(x_i-\mu)^2}{2\sigma^2}\right]<br>$$<br>之后，求联合概率密度函数，也即是似然函数：（具体的公式推导就不展开了）</p>
+<p>$$<br>L(\mu, \sigma) = \sigma^{-n}(2\pi)^{-n/2}exp\left[-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right]<br>$$<br>通过一些处理方法，比如对$L(\theta)$求log函数，然后再对$\mu$求偏导，并令偏导数为0，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}X_i = \bar{X}<br>$$<br>然后，基于给定的样本数据，得到$\mu$的最大似然估计如下:</p>
+<p>$$<br>\hat\mu = \frac{1}{n}\sum_{i=1}^{n}x_i = \frac 1 {10}(115+122+…+180) = 142.2<br>$$</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/09/15/Algorithms/贝叶斯公式与最大似然估计/" data-id="cjtinfpox000kxw77bt4g5shz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/09/19/kaggle/DigitRecognizer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          DigitRecognizer
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/09/13/Algorithms/EM算法/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">EM算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/C语言/">C语言</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MachineLearning/">MachineLearning</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/kaggle/">kaggle</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/python3/">python3</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/weibo/">weibo</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/word2vec/">word2vec</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据挖掘/">数据挖掘</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Algorithm/">Algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BP算法/">BP算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bayes/">Bayes</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C语言/">C语言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EM/">EM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/IO/">IO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KNN/">KNN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPSS/">SPSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/beautifulsoup/">beautifulsoup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collections/">collections</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/divide-and-conquer/">divide-and-conquer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/file/">file</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jieba/">jieba</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k-means/">k-means</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kaggle/">kaggle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matplotlib/">matplotlib</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pandas/">pandas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-爬虫/">python 爬虫</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python3/">python3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/realize/">realize</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sklearn/">sklearn</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/snippets/">snippets</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/weibo/">weibo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/wiebo/">wiebo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/word2vec/">word2vec</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/全概率公式/">全概率公式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/决策树/">决策树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分类/">分类</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动态规划/">动态规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串/">字符串</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/小demo/">小demo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具/">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/微博/">微博</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/支持向量机/">支持向量机</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据分析/">数据分析</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间复杂度/">时间复杂度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/最大似然估计/">最大似然估计</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝叶斯/">贝叶斯</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Algorithm/" style="font-size: 17.5px;">Algorithm</a> <a href="/tags/BP算法/" style="font-size: 10px;">BP算法</a> <a href="/tags/Bayes/" style="font-size: 10px;">Bayes</a> <a href="/tags/C语言/" style="font-size: 10px;">C语言</a> <a href="/tags/DL/" style="font-size: 10px;">DL</a> <a href="/tags/EM/" style="font-size: 10px;">EM</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/KNN/" style="font-size: 10px;">KNN</a> <a href="/tags/MachineLearning/" style="font-size: 12.5px;">MachineLearning</a> <a href="/tags/NLP/" style="font-size: 10px;">NLP</a> <a href="/tags/SPSS/" style="font-size: 10px;">SPSS</a> <a href="/tags/beautifulsoup/" style="font-size: 10px;">beautifulsoup</a> <a href="/tags/collections/" style="font-size: 10px;">collections</a> <a href="/tags/divide-and-conquer/" style="font-size: 10px;">divide-and-conquer</a> <a href="/tags/file/" style="font-size: 10px;">file</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/jieba/" style="font-size: 10px;">jieba</a> <a href="/tags/k-means/" style="font-size: 10px;">k-means</a> <a href="/tags/kaggle/" style="font-size: 10px;">kaggle</a> <a href="/tags/matplotlib/" style="font-size: 12.5px;">matplotlib</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/pandas/" style="font-size: 10px;">pandas</a> <a href="/tags/python/" style="font-size: 20px;">python</a> <a href="/tags/python-爬虫/" style="font-size: 10px;">python 爬虫</a> <a href="/tags/python3/" style="font-size: 10px;">python3</a> <a href="/tags/realize/" style="font-size: 10px;">realize</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/sklearn/" style="font-size: 10px;">sklearn</a> <a href="/tags/snippets/" style="font-size: 10px;">snippets</a> <a href="/tags/weibo/" style="font-size: 10px;">weibo</a> <a href="/tags/wiebo/" style="font-size: 10px;">wiebo</a> <a href="/tags/word2vec/" style="font-size: 10px;">word2vec</a> <a href="/tags/全概率公式/" style="font-size: 10px;">全概率公式</a> <a href="/tags/决策树/" style="font-size: 10px;">决策树</a> <a href="/tags/分类/" style="font-size: 12.5px;">分类</a> <a href="/tags/动态规划/" style="font-size: 10px;">动态规划</a> <a href="/tags/字符串/" style="font-size: 10px;">字符串</a> <a href="/tags/小demo/" style="font-size: 10px;">小demo</a> <a href="/tags/工具/" style="font-size: 10px;">工具</a> <a href="/tags/微博/" style="font-size: 10px;">微博</a> <a href="/tags/支持向量机/" style="font-size: 10px;">支持向量机</a> <a href="/tags/数据分析/" style="font-size: 10px;">数据分析</a> <a href="/tags/时间复杂度/" style="font-size: 10px;">时间复杂度</a> <a href="/tags/最大似然估计/" style="font-size: 10px;">最大似然估计</a> <a href="/tags/算法/" style="font-size: 12.5px;">算法</a> <a href="/tags/贝叶斯/" style="font-size: 10px;">贝叶斯</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/21/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/DivideAndConquer/">Divide and Conquer</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/Algorithms/Dynamic-Planning/">Dynamic Planning</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/python3/word2vec/">word2vec</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/21/Algorithms/算法/">算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
